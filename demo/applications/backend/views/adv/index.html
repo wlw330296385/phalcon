@@ -1,0 +1,338 @@
+<div class="container-fluid">
+    <div class="widget-box">
+        <div class="widget-title"><span class="icon"> <i class="icon-th"></i> </span>
+            <h5>{{title}}</h5>
+        </div>
+        <div class="widget-content">
+            <div id='datagrid'></div>
+            <div id='win'>
+                <form id='form1' action="" method="post"></form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    var datagrid;
+    var form1;
+    var form1_defaults = {name:'',title:'',module_id:0,action_id:0,media_type:'image',code:'',media:'',link:'',show_zone:'top',status:'regular'};
+    var win;
+
+    $.ligerDefaults.Grid.formatters['formatStatus'] = function (data, column) {
+        var list = {regular: '正常', singular: '禁用'};
+        return list[data] ? list[data] : data;
+    };
+
+
+    //添加操作
+    function add() {
+        form1.setData(form1_defaults);
+        $('#form1').attr('action', "{{url('Adv/add')}}");
+        win._setTitle('添加广告');
+        win.show();
+    }
+
+
+    //编辑操作
+    function edit() {
+        var row = datagrid.getSelected();
+        if (!row) {
+            $.ligerDialog.error('请选择要编辑的广告');
+            return false;
+        } else {
+            form1.setData(row);
+        }
+        $('#form1').attr('action', "{{url('Adv/edit')}}");
+        win._setTitle('编辑 [' + row.title + '] 广告');
+        win.show();
+    }
+
+    //删除操作
+    function del() {
+        var row = datagrid.getSelected();
+        if (!row) {
+            $.ligerDialog.error('请选择要删除的广告');
+            return false;
+        } else {
+            $.ligerDialog.confirm('确定要删除 [ ' + row.title + ' ] 广告?', function (type) {
+                if (type) {
+                    $('#form1').ajaxForm("{{url('Adv/delete')}}", {id: row.id}, function (response) {
+                        if (response.status == 0) {
+                            $.ligerDialog.error(response.message);
+                        } else {
+                            $.ligerDialog.success(response.message);
+                            datagrid.reload();
+                        }
+                    });
+                }
+            });
+        }
+    }
+
+    function select_module(value,text){
+        form1.getEditor('action_id').set({url:'{{url("Adv/getModuleAct")}}',parms:{module_id:value}});
+    }
+
+
+
+    //提交表单
+    function submitform() {
+        if (form1.valid()) {
+            var form_data = form1.getData();
+            $.post($('#form1').attr('action'), form_data, function (response) {
+                if (response.status == 0) {
+                    $.ligerDialog.error(response.message);
+                } else {
+                    $.ligerDialog.success(response.message);
+                    datagrid.reload();
+                    win.hide();
+                }
+            });
+        } else {
+            $.ligerDialog.error("表单没有通过验证,请检查红色标记的表单项");
+        }
+    }
+
+    $(function () {
+        datagrid = $('#datagrid').ligerGrid({
+            width: "100%",
+            height: "100%",
+            url: "{{url('Adv/index')}}",
+            columns: [{
+                display: "编号",
+                name: "id",
+                align: "center",
+                width: 40,
+                minwidth: 40,
+                frozen: true
+            }, {
+                display: "广告名称",
+                name: "name",
+                align: "center",
+                width: 150,
+                minwidth: 60
+            }, {
+                display: "广告标题",
+                name: "title",
+                align: "center",
+                width: 150,
+                minwidth: 60
+            }, {
+                display: "所属模块",
+                name: "module_name",
+                align: "center",
+                width: 120,
+                minwidth: 60
+            }, {
+                display: "所属动作",
+                name: "action_name",
+                align: "center",
+                width: 120
+            }, {
+                display: "广告类型",
+                name: "media_type",
+                align: "center",
+                format:'Y-m-d H:i',
+                render:function(rowdata, index, value){
+                    var data = {image:'图片',swf:'FLASH'};
+                    return data[value] ? data[value] : '未知';
+                },
+                width: 80
+            }, {
+                display: "状态",
+                name: "status",
+                align: "center",
+                type:'formatStatus',
+                width: 80
+            }],
+            frozen: true,
+            toolbar: {
+                items: [
+                    {
+                        text: "添加",
+                        icon: "icon-plus",
+                        click: add
+                    },
+                    {
+                        text: "编辑",
+                        icon: "icon-edit",
+                        click: edit
+                    },
+                    {
+                        text: "删除",
+                        icon: "icon-remove",
+                        click: del
+                    }
+                ]
+            }
+        });
+
+        form1 = $('#form1').ligerForm({
+            inputwidth: 200,
+            labelwidth: 80,
+            space: 10,
+            validate: true,
+            righttoken: "&nbsp;",
+            labelalign: "right",
+            align: "left",
+            fields: [
+                {
+                    id: "id", name: "id", newline: false, type: "hidden", display: "id"
+                }, {
+                    id:'name',
+                    name:'name',
+                    newline:true,
+                    type:'textbox',
+                    display:'广告名称',
+                    aftercontent:'',
+                    width:300,
+                    validate:{required:true},
+                    editor: {
+                        width: 300
+                    }
+                },{
+                    id:'title',
+                    name:'title',
+                    newline:true,
+                    type:'textbox',
+                    display:'广告标题',
+                    aftercontent:'',
+                    width:300,
+                    validate:{required:true},
+                    editor: {
+                        width: 300
+                    }
+                },{
+                    id: "module_id",
+                    name: "module_id",
+                    newline: true,
+                    type: "combobox",
+                    display: "所属模块",
+                    width: 150,
+                    height: 30,
+                    validate: {required: true},
+                    editor: {
+                        url: '{{url("Adv/getModule")}}',
+                        cancelable: false,
+                        onselected:select_module
+                    }
+                }, {
+                    id: "action_id",
+                    name: "action_id",
+                    newline: true,
+                    type: "combobox",
+                    display: "所属动作",
+                    width: 150,
+                    height: 30,
+                    validate: {required: true},
+                    editor: {
+                        width: 150,
+                        cancelable: false
+                    }
+                },{
+                    id: "media_type",
+                    name: "media_type",
+                    newline: true,
+                    type: "combobox",
+                    display: "广告类型",
+                    aftercontent: "",
+                    width: 120,
+                    validate: {required: true},
+                    editor: {
+                        width: 120,
+                        data:[{id:'image',text:'图片'},{id:'swf',text:'FLASH'}]
+                    }
+                },{
+                    id: "code",
+                    name: "code",
+                    newline: true,
+                    type: "textarea",
+                    display: "广告代码",
+                    aftercontent:"<code>可用标签:%link% %media% %title% %name%</code>",
+                    width: 400,
+                    height: 80,
+                    validate: { required: false },
+                    editor: {
+                        width: 400,
+                        height:80
+                    }
+                },{
+                    id: "media",
+                    name: "media",
+                    newline: true,
+                    type: "file",
+                    display: "广告文件",
+                    aftercontent:"",
+                    width: 400,
+                    height: 50,
+                    validate: { required: true },
+                    editor: {
+                        url:"{{url('Uploader/?action=uploadfile')}}",
+                        width: 400
+                    }
+                },{
+                    id:'link',
+                    name:'link',
+                    newline:true,
+                    type:'textbox',
+                    display:'连接',
+                    aftercontent:'',
+                    width:300,
+                    validate:{required:true},
+                    editor: {
+                        width: 300
+                    }
+                },{
+                    id: "show_zone",
+                    name: "show_zone",
+                    newline: true,
+                    type: "combobox",
+                    display: "显示位置",
+                    aftercontent: "",
+                    width: 120,
+                    validate: {required: true},
+                    editor: {
+                        width: 120,
+                        initvalue:'no',
+                        cancelable: false,
+                        data:[{id:'top',text:'页面顶部'},{id:'center',text:'页面中央'},{id:'footer',text:'页面底部'}]
+                    }
+                },{
+                    id: "status",
+                    name: "status",
+                    newline: true,
+                    type: "combobox",
+                    display: "状态",
+                    aftercontent: "",
+                    width: 80,
+                    validate: {required: true},
+                    editor: {
+                        width: 150,
+                        initvalue:'no',
+                        cancelable: false,
+                        data:[{id:'regular',text:'正常'},{id:'singular',text:'禁用'}]
+                    }
+                }
+            ]
+        });
+
+        win = $.ligerDialog({
+            width: 650,
+            height: 655,
+            target: $('#win'),
+            modal: true,
+            show: false,
+            title: "幻灯片管理",
+            slide: true,
+            buttons: [
+                {
+                    text: "确认提交",
+                    icon: "icon-edit",
+                    onclick: submitform
+                }
+            ]
+        });
+        win.hide();
+    });
+</script>

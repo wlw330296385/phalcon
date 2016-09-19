@@ -1,0 +1,428 @@
+<div class="container-fluid">
+    <div class="widget-box">
+        <div class="widget-title"><span class="icon"> <i class="icon-th"></i> </span>
+            <h5>{{title}}</h5>
+        </div>
+        <div class="widget-content">
+            <div id='datagrid'></div>
+            <div id='win'>
+                <form id='form1' action="" method="post"></form>
+            </div>
+
+            <div id="action_form_win">
+                <form id='action_form' action="" method="post"></form>
+            </div>
+
+            <div id='action_win'>
+                <div id='action_datagrid'></div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    var datagrid;
+    var action_datagrid;
+    var form1;
+    var form1_defaults = {id:'',name:'',aging:'1',recommend:'1',sort:'0'};
+    var action_form;//动作表单
+    var win;//编辑窗口
+    var action_win;//动作管理窗口
+    var action_form_win;//动作表单窗口
+
+    $.ligerDefaults.Grid.formatters['formatRecommend'] = function (data, column) {
+        var list = {1:'是',0:'否'};
+        var text = list[data] ? list[data] : '未知';
+        return "<span class='by label label-success'>" + text + "</span>";
+    };
+
+
+    //添加操作
+    function add() {
+        form1.setData(form1_defaults);
+        $('#form1').attr('action', "{{url('FrontModule/add')}}");
+        win._setTitle('添加模块');
+        win.show();
+    }
+
+    //编辑操作
+    function edit() {
+        var row = datagrid.getSelected();
+        if (!row) {
+            $.ligerDialog.error('请选择要编辑的模块信息');
+            return false;
+        } else {
+            form1.setData(row);
+        }
+        $('#form1').attr('action', "{{url('FrontModule/edit')}}");
+        win._setTitle('编辑 [' + row.module_name + '] 模块');
+        win.show();
+    }
+
+    //删除操作
+    function del() {
+        var row = datagrid.getSelected();
+        if(!row){
+            $.ligerDialog.error('请选择要删除的模块');
+            return false;
+        }else{
+            $.ligerDialog.confirm('确定要删除 [ '+ row.module_name +' ] 模块?', function (type) {
+                if(type){
+                    $('#form1').ajaxForm("{{url('FrontModule/delete')}}",{id:row.id},function(response){
+                        if(response.status == 0){
+                            $.ligerDialog.error(response.message);
+                        }else{
+                            $.ligerDialog.success(response.message);
+                            datagrid.reload();
+                        }
+                    });
+                }
+            });
+        }
+    }
+
+
+    //添加动作操作
+    function add_action() {
+        var row = datagrid.getSelected();
+        action_form.setData({id:'',title:'',name:'',pid:row.id});
+        $('#action_form').attr('action', "{{url('FrontModule/addAct')}}");
+        action_form_win._setTitle('添加模块动作');
+        action_form_win.show();
+    }
+
+    //编辑动作操作
+    function edit_action() {
+        var row = action_datagrid.getSelected();
+        if (!row) {
+            $.ligerDialog.error('请选择要编辑的模块动作信息');
+            return false;
+        } else {
+            action_form.setData(row);
+        }
+        $('#action_form').attr('action', "{{url('FrontModule/editAct')}}");
+        action_form_win._setTitle('编辑 [' + row.title + '] 模块动作');
+        action_form_win.show();
+    }
+
+    //删除动作操作
+    function del_action() {
+        var row = action_datagrid.getSelected();
+        if(!row){
+            $.ligerDialog.error('请选择要删除的模块动作');
+            return false;
+        }else{
+            $.ligerDialog.confirm('确定要删除 [ '+ row.title +' ] 模块动作?', function (type) {
+                if(type){
+                    $('#action_form').ajaxForm("{{url('FrontModule/deleteAct')}}",{id:row.id},function(response){
+                        if(response.status == 0){
+                            $.ligerDialog.error(response.message);
+                        }else{
+                            $.ligerDialog.success(response.message);
+                            action_datagrid.reload();
+                        }
+                    });
+                }
+            });
+        }
+    }
+
+    //提交表单
+    function submitActionForm() {
+        if (form1.valid()) {
+            var form_data = action_form.getData();
+            $.post($('#action_form').attr('action'), form_data, function (response) {
+                if (response.status == 0) {
+                    $.ligerDialog.error(response.message);
+                    action_form_win.show();
+                } else {
+                    $.ligerDialog.success(response.message);
+                    action_datagrid.reload();
+                    action_form_win.hide();
+                }
+            });
+        } else {
+            $.ligerDialog.error("表单没有通过验证,请检查红色标记的表单项");
+        }
+    }
+
+
+    //提交表单
+    function submitForm() {
+        if (form1.valid()) {
+            var form_data = form1.getData();
+            $.post($('#form1').attr('action'), form_data, function (response) {
+                if (response.status == 0) {
+                    $.ligerDialog.error(response.message);
+                } else {
+                    $.ligerDialog.success(response.message);
+                    datagrid.reload();
+                    win.hide();
+                }
+            });
+        } else {
+            $.ligerDialog.error("表单没有通过验证,请检查红色标记的表单项");
+        }
+    }
+
+    /**
+     * 管理动作
+     */
+    function showAction(){
+        var row = datagrid.getSelected();
+        if(!row){
+            $.ligerDialog.error('请选择要管理动作的模块');
+            return false;
+        }else{
+            action_datagrid.set({url:'{{url("FrontModule/getAct")}}',parms:{pid:row.id}});
+            action_win.show();
+        }
+    }
+
+    $(function () {
+        datagrid = $('#datagrid').ligerGrid({
+            width: "100%",
+            height: "100%",
+            url: "{{url('FrontModule/index')}}",
+            columns: [{
+                display: "编号",
+                name: "id",
+                align: "center",
+                width: 40,
+                minwidth: 40,
+                frozen: true
+            }, {
+                display: "模块名称",
+                name: "module_name",
+                align: "center",
+                width: 250,
+                minwidth: 60
+            },{
+                display: "模块类名",
+                name: "module_class",
+                align: "center",
+                width: 100,
+                minwidth: 60
+            },{
+                display: "模块描述",
+                name: "module_description",
+                align: "center",
+                width: 80
+            }],
+            frozen: true,
+            toolbar: {
+                items: [
+                    {
+                        text: "添加",
+                        icon: "icon-plus",
+                        click: add
+                    },
+                    {
+                        text: "编辑",
+                        icon: "icon-edit",
+                        click: edit
+                    },
+                    {
+                        text: "管理动作",
+                        icon: "icon-magic",
+                        click: showAction
+                    },
+                    {
+                        text: "删除",
+                        icon: "icon-remove",
+                        click: del
+                    }
+
+                ]
+            }
+        });
+
+
+        action_datagrid = $('#action_datagrid').ligerGrid({
+            width: "100%",
+            height: "310",
+            columns: [{
+                display: "编号",
+                name: "id",
+                align: "center",
+                width: 40,
+                minwidth: 40,
+                frozen: true
+            }, {
+                display: "动作名称",
+                name: "title",
+                align: "center",
+                width: 250,
+                minwidth: 60
+            },{
+                display: "动作方法",
+                name: "name",
+                align: "center",
+                width: 200,
+                minwidth: 60
+            }],
+            frozen: true,
+            toolbar: {
+                items: [
+                    {
+                        text: "添加",
+                        icon: "icon-plus",
+                        click: add_action
+                    },
+                    {
+                        text: "编辑",
+                        icon: "icon-edit",
+                        click: edit_action
+                    },
+                    {
+                        text: "删除",
+                        icon: "icon-remove",
+                        click: del_action
+                    }
+
+                ]
+            }
+        });
+
+        form1 = $('#form1').ligerForm({
+            inputwidth: 400,
+            labelwidth: 80,
+            space: 10,
+            validate: true,
+            righttoken: "&nbsp;",
+            labelalign: "right",
+            align: "left",
+            fields: [
+                {
+                    id: "id", name: "id", newline: false, type: "hidden", display: "id"
+                },
+                {
+                    id: "module_name",
+                    name: "module_name",
+                    newline: true,
+                    type: "textbox",
+                    display: "模块名称",
+                    width: 200,
+                    height: 30,
+                    aftercontent: '',
+                    validate: { required: true },
+                    editor: {width: 200}
+                }, {
+                    id: "module_class",
+                    name: "module_class",
+                    newline: true,
+                    type: "textbox",
+                    display: "模块类",
+                    aftercontent:"",
+                    width: 200,
+                    validate: { required: true },
+                    editor: {
+                        width: 200
+                    }
+                }, {
+                    id: "module_description",
+                    name: "module_description",
+                    newline: true,
+                    type: "textarea",
+                    display: "模块描述",
+                    aftercontent:"",
+                    width: 250,
+                    height:50,
+                    validate: { required: false },
+                    editor: {
+                        width: 250,
+                        height:50
+                    }
+                }]
+        });
+
+
+        action_form = $('#action_form').ligerForm({
+            inputwidth: 400,
+            labelwidth: 80,
+            space: 10,
+            validate: true,
+            righttoken: "&nbsp;",
+            labelalign: "right",
+            align: "left",
+            fields: [
+                {
+                    id: "action_id", name: "id", newline: true, type: "hidden"
+                },
+                {
+                    id: "pid", name: "pid", newline: true, type: "hidden", display: "pid"
+                },
+                {
+                    id: "title",
+                    name: "title",
+                    newline: true,
+                    type: "textbox",
+                    display: "动作名称",
+                    width: 200,
+                    height: 30,
+                    aftercontent: '',
+                    validate: { required: true },
+                    editor: {width: 200}
+                }, {
+                    id: "name",
+                    name: "name",
+                    newline: true,
+                    type: "textbox",
+                    display: "动作方法",
+                    aftercontent:"",
+                    width: 200,
+                    validate: { required: true },
+                    editor: {
+                        width: 200
+                    }
+                }]
+        });
+
+        action_form_win = $.ligerDialog({
+            width: 400,
+            height: 170,
+            target: $('#action_form_win'),
+            modal: true,
+            show: false,
+            title: "编辑模块动作",
+            slide: true,
+            buttons: [
+                {
+                    text: "确认提交",
+                    icon: "icon-edit",
+                    onclick: submitActionForm
+                }
+            ]
+        });
+        action_form_win.hide();
+
+        action_win = $.ligerDialog({
+            width: 600,
+            height: 382,
+            target: $('#action_win'),
+            modal: true,
+            show: false,
+            title: "管理模块动作",
+            slide: true
+        });
+        action_win.hide();
+        win = $.ligerDialog({
+            width: 400,
+            height: 260,
+            target: $('#win'),
+            modal: true,
+            show: false,
+            title: "编辑前台模块",
+            slide: true,
+            buttons: [
+                {
+                    text: "确认提交",
+                    icon: "icon-edit",
+                    onclick: submitForm
+                }
+            ]
+        });
+        win.hide();
+    });
+</script>

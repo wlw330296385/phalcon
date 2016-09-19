@@ -1,0 +1,34 @@
+<div class="container-fluid">
+    <div class="widget-box">
+        <div class="widget-title"> <span class="icon"> <i class="icon-th"></i> </span>
+        <h5>修改设置</h5>
+        </div>
+        <div class="widget-content" style="padding: 1px 1px 1px 1px;overflow-y:auto;">
+            <form id="form" action="{{url('setting/save')}}" method="post"></form>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    var form;
+    $(function() {
+        form = $("#form").ligerForm({{setting_field}});
+        form.setData({{setting_data}});
+    });
+    function submitform(){
+        if(form.valid()){
+            var form_data = form.getData();
+            $('#form').ajaxForm($('#form').attr('action'), form_data, function (response) {
+                if (response.status == 0) {
+                    $.ligerDialog.error(response.message);
+                } else {
+                    $.ligerDialog.success(response.message);
+                }
+            });
+        }else{
+            $.ligerDialog.error("部分字段没有填写或者填写错误");
+        }
+        return false;
+    }
+</script>

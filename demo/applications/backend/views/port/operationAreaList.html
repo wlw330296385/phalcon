@@ -1,0 +1,332 @@
+<div class="container-fluid">
+    <div class="widget-box">
+        <div class="widget-title"><span class="icon"> <i class="icon-th"></i> </span>
+            <h5>{{title}}</h5>
+        </div>
+        <div class="widget-content">
+            <div id='datagrid'></div>
+            <div id='win'>
+                <form id='form1' action="" method="post"></form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    var datagrid;
+    var form1;
+    var form1_defaults = {username:'',usertype:'person',login_type:'normal',birthday:'',origin:'site',password:'',mobile:'',email:'',status:'regular'};
+    var win;
+    var portname;
+
+
+    $.ligerDefaults.Grid.formatters['formatStatus'] = function (data, column) {
+        var list = {regular: '正常',pending:'待审核',deny:'禁用'};
+        return list[data] ? list[data] : data;
+    };
+
+
+    //添加操作
+    function add() {
+        form1.setData(form1_defaults);
+        $('#form1').attr('action', "{{url('Port/saveArea')}}");
+        win._setTitle('添加作业区');
+        win.show();
+    }
+
+
+    //编辑操作
+    function edit() {
+        var row = datagrid.getSelected();
+        if (!row) {
+            $.ligerDialog.error('请选择要编辑的作业区');
+            return false;
+        } else {
+            console.info(form1);
+            form1.setData(row);
+        }
+        $('#form1').attr('action', "{{url('Port/saveArea')}}");
+        win._setTitle('编辑 [' + row.name + '] 作业区');
+        win.show();
+    }
+
+    //删除操作
+    function del() {
+
+        var row = datagrid.getSelected();
+        if (!row) {
+            $.ligerDialog.error('请选择要删除的作业区');
+            return false;
+        } else {
+            $.ligerDialog.confirm('确定要删除 [ ' + row.username + ' ] 作业区?', function (type) {
+                if (type) {
+                    $('#form1').ajaxForm("{{url('port/deleteArea')}}", {id: row.id}, function (response) {
+                        if (response.status == 0) {
+                            $.ligerDialog.error(response.message);
+                        } else {
+                            $.ligerDialog.success(response.message);
+                            datagrid.reload();
+                        }
+                    });
+                }
+            });
+        }
+    }
+
+
+
+    //提交表单
+    function submitform() {
+        if (form1.valid()) {
+            var form_data = form1.getData();
+            $.post($('#form1').attr('action'), form_data, function (response) {
+                if (response.status == 0) {
+                    $.ligerDialog.error(response.message);
+                } else {
+                    $.ligerDialog.success(response.message);
+                    datagrid.reload();
+                    win.hide();
+                }
+            });
+        } else {
+            $.ligerDialog.error("表单没有通过验证,请检查红色标记的表单项");
+        }
+    }
+
+    $(function () {
+
+        datagrid = $('#datagrid').ligerGrid({
+            width: "100%",
+            height: "100%",
+            url: "{{url('Port/operationAreaList')}}",
+            columns: [{
+                display: "编号",
+                name: "id",
+                align: "center",
+                width: 40,
+                minwidth: 40,
+                frozen: true
+            }, {
+                display: "作业区名",
+                name: "name",
+                align: "center",
+                width: 150,
+                minwidth: 60
+            }, {
+                display: "所属港口",
+                name: "portname",
+                align: "center",
+                width: 80,
+                minwidth: 60,
+            }, {
+                display: "是否启用",
+                name: "status",
+                align: "center",
+                width: 80,
+                minwidth: 60,
+                render:function(data,index,value){
+                    var data = {0:'未启用',1:'已启用'};
+                    return data[value] ? data[value] : '0';
+                }
+            }, {
+                display: "排序",
+                name: "order",
+                align: "center",
+                width: 150,
+                minwidth: 60
+            },{
+                display: "签到距离(米)",
+                name: "check_in_radius",
+                align: "center",
+                width: 150,
+                minwidth: 60
+            },{
+                display: "经度",
+                name: "longitude",
+                align: "center",
+                width: 150,
+                minwidth: 60
+            },{
+                display: "纬度",
+                name: "latitude",
+                align: "center",
+                width: 150,
+                minwidth: 60
+            },{
+                display: "闸口统计",
+                name: "gate_counter",
+                align: "center",
+                width: 150,
+                minwidth: 60
+            },{
+                display: "创建日期",
+                name: "c_time",
+                align: "center",
+                width: 150,
+                minwidth: 60
+            },{
+                display: "更新日期",
+                name: "u_time",
+                align: "center",
+                width: 150,
+                minwidth: 60
+            }],
+            frozen: true,
+            toolbar: {
+                items: [
+                    {
+                        text: "添加",
+                        icon: "icon-plus",
+                        click: add
+                    },
+                    {
+                        text: "编辑",
+                        icon: "icon-edit",
+                        click: edit
+                    },
+                    {
+                        text: "删除",
+                        icon: "icon-remove",
+                        click: del
+                    }
+                ]
+            }
+        });
+
+        form1 = $('#form1').ligerForm({
+            inputwidth: 350,
+            labelwidth: 120,
+            space: 10,
+            validate: true,
+            righttoken: "&nbsp;",
+            labelalign: "right",
+            align: "left",
+            fields: [
+                {
+                    id: "id", name: "id", newline: false, type: "hidden", display: "id"
+                }, {
+                    id: 'name',
+                    name: 'name',
+                    newline: true,
+                    type: 'textbox',
+                    display: '作业区名',
+                    aftercontent: '',
+                    width: 300,
+                    validate: {required: true},
+                    editor: {
+                        width: 300
+                    }
+                }, {
+                    id: 'port_id',
+                    name: 'port_id',
+                    newline: true,
+                    type: 'combobox',
+                    display: '所属港口',
+                    aftercontent: '',
+                    width: 100,
+                    validate: {required: true},
+                    editor: {
+                        width: 100,
+                        cancelable:false,
+//                        data: portname
+                        url:"{{url('Port/getPort')}}"
+                    }
+                },  {
+                    id: "status",
+                    name: "status",
+                    newline: true,
+                    type: "combobox",
+                    display: "是否启用",
+                    aftercontent: "",
+                    width: 80,
+                    validate: {required: true},
+                    editor: {
+                        width: 150,
+                        initvalue: 'pending',
+                        cancelable: false,
+                        data: [{id: '0', text: '不启用'}, {id: '1', text: '启用'}]
+                    }
+                }, {
+                    id: 'order',
+                    name: 'order',
+                    newline: true,
+                    type: 'textbox',
+                    display: '排序',
+                    aftercontent: '',
+                    width: 300,
+                    validate: {required: true},
+                    editor: {
+                        width: 300
+                    }
+                }, {
+                    id: 'check_in_radius',
+                    name: 'check_in_radius',
+                    newline: true,
+                    type: 'textbox',
+                    display: '签到距离(米)',
+                    aftercontent: '',
+                    width: 300,
+                    validate: {required: true},
+                    editor: {
+                        width: 300
+                    }
+                }, {
+                    id: 'longitude',
+                    name: 'longitude',
+                    newline: true,
+                    type: 'textbox',
+                    display: '经度',
+                    aftercontent: '',
+                    width: 300,
+                    validate: {required: true},
+                    editor: {
+                        width: 300
+                    }
+                }, {
+                    id: 'latitude',
+                    name: 'latitude',
+                    newline: true,
+                    type: 'textbox',
+                    display: '维度',
+                    aftercontent: '',
+                    width: 300,
+                    validate: {required: true},
+                    editor: {
+                        width: 300
+                    }
+                }, {
+                    id: 'gate_counter',
+                    name: 'gate_counter',
+                    newline: true,
+                    type: 'textbox',
+                    display: '闸口统计',
+                    aftercontent: '',
+                    width: 300,
+                    validate: {required: true},
+                    editor: {
+                        width: 300
+                    }
+                }
+            ]
+        });
+
+        win = $.ligerDialog({
+            width: 500,
+            height: 500,
+            target: $('#win'),
+            modal: true,
+            show: false,
+            title: "作业区管理",
+            slide: true,
+            buttons: [
+                {
+                    text: "确认提交",
+                    icon: "icon-edit",
+                    onclick: submitform
+                }
+            ]
+        });
+        win.hide();
+    });
+</script>

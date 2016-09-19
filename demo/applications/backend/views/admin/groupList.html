@@ -1,0 +1,374 @@
+<div class="container-fluid">
+    <div class="widget-box">
+        <div class="widget-title"> <span class="icon"> <i class="icon-th"></i> </span>
+            <h5>查看管理组列表</h5>
+        </div>
+        <div class="widget-content">
+            <div id="datagrid"></div>
+        </div>
+    </div>
+</div>
+
+
+<!---表单-->
+<div id="privilege_dialog" style="display:none;width:690px;height:545px;overflow-y:auto;">
+    <form id="privilege_form" name="privilege_form" action="" method="post" class="form-horizontal" style="margin:0">
+        <input type="hidden" id="acl_id" name="acl_id" value="" class="ui-hidden" />
+        <div class="widget-listbox">
+            <div class="widget-listdata nopadding updates collapse in" id="collapseG3">
+{% for key,item in module_list %}
+                <div class="list-item clearfix">
+                    <div class="list-done" style="max-width: 100%;">
+                        <label class="control-label" style="width: 140px;text-align:center;"><strong>{{item['title']}}</strong></label>
+                        <div class="controls" style="margin-left: 140px;">
+{% if action_list[key] is defined %}
+{% for action in action_list[key] %}
+                            <span class="item">
+                                <input type="checkbox" id="acl_{{action['id']}}" name="acl[{{action['id']}}]" class="ui-checkbox" {% if key == 'index' %}checked readonly="true"{% endif %}>{{action['title']}}
+                            </span>
+{% endfor %}
+{% endif %}
+                        </div>
+                    </div>
+                    <div class="list-btn"><button class="btn btn-info btn-mini" onclick="return checkAll(this);">全选</button></div>
+                </div>
+{% endfor %}
+            </div>
+        </div>
+    </form>
+</div>
+
+
+<!---表单-->
+<div id="group_dialog" style="display:none;width:550px;height:320px;">
+    <form id="group_form" name="group_form" action="" method="post" class="form-horizontal"></form>
+</div>
+
+
+<script>
+    var group_list = {{group_list}};
+    var datagrid;
+    var group_dialog;
+    var group_form;
+    var privilege_dialog;
+    var privilege_form;
+    var menu;
+    var pid;
+    $.ligerDefaults.Grid.formatters['status'] = function (data, column){
+        return (data == 0) ? '禁用' : '正常';
+    };
+
+    $.ligerDefaults.Grid.formatters['pid'] = function(data,column){
+        return group_list[data];
+    };
+
+    //编辑权限
+    function privilege(){
+        var row = datagrid.getSelected();
+        if(!row){
+            $.ligerDialog.error('请选择要编辑权限的管理组');
+            return false;
+        }else {
+            var priv_form = $('#privilege_form');
+            priv_form.clearForm();
+            $('#acl_id').val(row.id);
+            priv_form.attr('action',"{{url('admin/setAcl')}}");
+            if(row.id == '1'){
+                priv_form.ajaxForm(priv_form.attr('action'),{acl_id:row.id});
+                $.ligerDialog.error('系统管理组不允许设置权限');
+                return false;
+            }else{
+                if(row['acl'] != '' && row['acl'] != null){
+                    var acl_data = row['acl'].split(',');
+                    for(var i=0;i<acl_data.length;i++){
+                        var obj = 'acl_'+acl_data[i];
+                        $('#'+obj).click().closest("div").find('a').addClass('l-checkbox-checked');
+                    }
+                }
+            }
+
+            privilege_dialog._setTitle('管理 [ ' + row.name + ' ] 权限');
+            privilege_dialog.show();
+        }
+    }
+    //全选
+    function checkAll(obj){
+        $(obj).parent().parent().find('input[type=checkbox]').each(function(){
+            var val = $(this).val();
+            var id = $(this).attr('ligeruiid');
+            liger.get(id).setValue(val);
+
+        });
+        return false;
+    }
+
+    //添加
+    function add(){
+        group_form.getEditor('pid').getTree().set({url:"{{url('admin/getParentGroup')}}"});
+        group_form.setData({name:'',status:'on',upload_size:0,sort:0,pid:0});
+        $('#group_form').attr('action',"{{url('admin/groupAdd')}}");
+        group_dialog._setTitle('添加管理组');
+        group_dialog.show();
+    }
+
+    //编辑
+    function edit(){
+        var row = datagrid.getSelected();
+        if(!row){
+            $.ligerDialog.error('请选择要编辑的管理组');
+            return false;
+        }else{
+            if(row.id == '1'){
+                $.ligerDialog.error('不能编辑系统管理组');
+                return false;
+            }
+            group_form.getEditor('pid').getTree().set({url:"{{url('admin/getParentGroup')}}&pid="+row.id});
+            group_form.setData(row);
+            $('#group_form').attr('action',"{{url('admin/groupEdit')}}");
+            group_dialog._setTitle('编辑管理组');
+            group_dialog.show();
+        }
+    }
+
+    //删除
+    function del(){
+        var row = datagrid.getSelected();
+        if(!row){
+            $.ligerDialog.error('请选择要删除的管理组');
+            return false;
+        }else{
+            if(row.id == '1'){
+                $.ligerDialog.error('不能编辑系统管理组');
+                return false;
+            }
+            $.ligerDialog.confirm('确定要删除 [ '+ row.name +' ] 管理组?', function (type) {
+                if(type){
+                    $.post("{{url('admin/groupDelete')}}",{id:row.id},function(response){
+                        if(response.status == 0){
+                            $.ligerDialog.error(response.message);
+                        }else{
+                            $.ligerDialog.success(response.message);
+                            datagrid.reload();
+                        }
+                    });
+                }
+            });
+        }
+    }
+
+    $(function(){
+        menu = $.ligerMenu({width:120,items:[{text:'权限管理',click:privilege,icon:'icon-magic'},{text:'编辑',click:edit,icon:'icon-edit'},{text:'删除',click:del,icon:'icon-trash'}]});
+        group_dialog = $.ligerDialog({
+            title:'',
+            width:'580',
+            height:'360',
+            target: $("#group_dialog"),
+            slide: true,
+            buttons: [
+                {
+                    text: "确认提交",
+                    icon: "icon-edit",
+                    onclick: submitform
+                }
+            ]});
+        group_dialog.hide();
+        privilege_dialog = $.ligerDialog({
+            title:'',
+            width:'705',
+            height:'620',
+            target: $("#privilege_dialog"),
+            showMin: true,
+            isResize: true,
+            modal: false,
+            buttons: [{ text: '保存', onclick: function (item, dialog) {
+                $('#privilege_form').submit();
+            }}]
+        });
+        privilege_dialog.hide();
+        privilege_form = $('#privilege_form').ligerForm();
+        group_form = $('#group_form').ligerForm(//表单初始化
+        {
+                    inputwidth: 200,
+                    labelwidth: 80,
+                    space: 10,
+                    validate: true,
+                    righttoken: "&nbsp;",
+                    labelalign: "right",
+                    align: "left",
+                    fields: [
+                        {
+                            name: "id", newline: false, type: "hidden"
+                        }, {
+                            name: 'name',
+                            newline: true,
+                            type: 'textbox',
+                            display: '角色名称',
+                            aftercontent: '',
+                            width: 180,
+                            validate: {required: true},
+                            editor: {
+                                width: 180
+                            }
+                        }, {
+                            name: "pid",
+                            newline: true,
+                            type: "combobox",
+                            display: "上级角色",
+                            aftercontent: "",
+                            width: 180,
+                            validate: {required: true},
+                            editor: {
+                                cancelable: false,
+                                width: 180,
+                                selectboxwidth: 250,
+                                selectboxheight: 400,
+                                ismultiselect:false,
+                                valuefield: 'id',
+                                treeleafonly:false,
+                                tree: {
+                                    single:true,
+                                    checkbox:true,
+                                    ajaxtype: 'post',
+                                    idfieldname :'id',
+                                    parentidfieldname :'pid'
+                                }
+                            }
+                        },{
+                            name: "upload_size",
+                            newline: true,
+                            type: "number",
+                            display: "上传大小",
+                            aftercontent: "单位:字节 0:不限制",
+                            width: 120,
+                            validate: {required: false},
+                            editor: {
+                                width: 120,
+                                format:'int',
+                                isnegative:false,
+                                digits:true
+                            }
+                        }, {
+                            name: 'upload_extension',
+                            newline: true,
+                            type: 'textbox',
+                            display: '上传后缀',
+                            aftercontent: '逗号分割',
+                            width: 180,
+                            validate: {required: true},
+                            editor: {
+                                width: 180
+                            }
+                        },
+                        {
+                            name: "status",
+                            newline: true,
+                            type: "combobox",
+                            display: "状态",
+                            aftercontent: "",
+                            width: 80,
+                            validate: {required: true},
+                            editor: {
+                                width: 80,
+                                initvalue: 'on',
+                                cancelable: false,
+                                data: [{id: 'on', text: '正常'}, {id: 'off', text: '禁用'}]
+                            }
+                        }, {
+                            name: 'sort',
+                            newline: true,
+                            type: 'spinner',
+                            display: '排序',
+                            aftercontent: '',
+                            width: 60,
+                            validate: {required: false},
+                            editor: {
+                                width: 60,
+                                format:'int',
+                                isnegative:false,
+                                digits:true,
+                                min:1,
+                                max:100
+                            }
+                        }
+                    ]
+                }
+        )
+        //提交表单
+        function submitform() {
+            if (group_form.valid()) {
+                var form_data = group_form.getData();
+                $.post($('#group_form').attr('action'), form_data, function (response) {
+                    if (response.status == 0) {
+                        $.ligerDialog.error(response.message);
+                    } else {
+                        $.ligerDialog.success(response.message);
+                        datagrid.reload();
+                        group_dialog.hide();
+                    }
+                });
+            } else {
+                $.ligerDialog.error("表单没有通过验证,请检查红色标记的表单项");
+            }
+        }
+
+
+        $('#privilege_form').validate({
+            submitHandler: function(form) {
+                var form_data = privilege_form.getData();
+                $('#privilege_form').ajaxForm($(form).attr('action'),form_data,function(response){
+                    if(response.status == 0){
+                        $.ligerDialog.error(response.message);
+                    }else{
+                        datagrid.reload();
+                        privilege_dialog.hide();
+                        $.ligerDialog.success(response.message);
+                    }
+                });
+            }
+        });
+        datagrid = $("#datagrid").ligerGrid({
+                    url:"{{url('admin/groupList')}}",
+                    columns: [
+                        { display: '编号', name: 'id',width: 50, type: 'int', align: 'center' },
+                        { display: '名称', name: 'name', id:'name',width: 250, align: 'left'},
+                        { display: '上级分类', name: 'pid', width: 120, align: 'center',type:'pid' },
+                        { display: '上传大小', name: 'upload_size', width: 80, align: 'center'},
+                        { display: '允许上传扩展', name: 'upload_extension', width: 380, align: 'left' },
+                        { display: '排序', name: 'sort', width: 50, align: 'center' },
+                        { display: '状态', name: 'status', width: 50, align: 'center',type:'status' }
+                    ], usepager:false, width: '100%',height:'100%', sortname: 'id', checkbox: false,whenrclicktoselect:true,ondblclickrow:edit,onrclicktoselect:true, oncontextmenu : function (parm,e) {actionid = parm.data.id;menu.show({ top: e.pageY, left: e.pageX });return false;},
+                    tree:
+                    {
+                        columnid: 'name',
+                        idfield: 'id',
+                        parentidfield: 'pid'
+                    },
+                    toolbar: {
+                        items: [
+                            {
+                                text: "添加",
+                                icon: "icon-plus-sign",
+                                click: add
+                            },
+                            {
+                                text: "编辑",
+                                icon: "icon-edit",
+                                click: edit
+                            },
+                            {
+                                text: "权限管理",
+                                icon: "icon-magic",
+                                click: privilege
+                            },
+                            {
+                                text: "删除",
+                                icon: "icon-trash",
+                                click: del
+                            }
+
+                        ]
+                    }
+                }
+        );
+    });
+</script>

@@ -1,0 +1,76 @@
+{%include "common/header.html"%}
+<body>
+<div id="loginbox" class="nopadding">
+    <form id="loginform" class="form-vertical" onsubmit="return $('#loginform').validate();">
+        <div class="control-group normal_text"> <h3><img src="/images/logo.png" alt="Logo" /></h3></div>
+        <div class="control-group ">
+            <div class="controls clearfix">
+                <div class="label-icon bg_lg">
+                    <i class="icon-user"></i>
+                </div>
+                <div class="control-ipt">
+                    <input name="username" type="text" required placeholder="帐号" />
+                </div>
+            </div>
+        </div>
+        <div class="control-group ">
+            <div class="controls clearfix">
+                <div class="label-icon bg_ly">
+                    <i class="icon-lock"></i>
+                </div>
+                <div class="control-ipt">
+                    <input name="password" type="password" minlength="6" minlength="6" required placeholder="密码" />
+                </div>
+            </div>
+        </div>
+        <div class="control-group ">
+            <div class="controls clearfix">
+                <div class="label-icon bg_lb">
+                    <i class="icon-bolt"></i>
+                </div>
+                <div class="control-ipt ipt-code">
+                    <input type="text" name="code" placeholder="验证码" required minlength="4" maxlength="4" style="text-transform:uppercase;" />
+                    <div class="box-code">
+                        <img id="code_img" src="{{url('login/validCode')}}">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-actions">
+            <button id="confirm" class="btn icon-off btn-large btn-success"> 登 录 </button>
+        </div>
+    </form>
+</div>
+<script>
+    $(document).ready(function() {
+        if (window!=top){
+            top.location.href =window.location.href;
+        }
+        $('#code_img').on('click', function () {
+            this.src = '{{url("login/validCode")}}';
+        });
+        $("#loginform").validate({
+            submitHandler: function (form) {
+                var data = $('#loginform').serializeArray();
+                $.ajax({
+                    type: 'POST',
+                    url: '{{url("login/check")}}',
+                    data: data,
+                    dataType: 'json',
+                    success: function (result) {
+                        if (result.status == 0) {
+                            $('#code_img').click();
+                            $.ligerDialog.error(result.message);
+                            return false;
+                        } else {
+                            window.location.href = '{{url("index/index")}}';
+                        }
+                    }
+                });
+            }
+        });
+    });
+</script>
+</body>
+
+</html>

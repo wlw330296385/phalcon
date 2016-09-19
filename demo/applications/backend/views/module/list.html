@@ -1,0 +1,476 @@
+<!---模块列表-->
+<div class="container-fluid">
+    <div class="widget-box">
+         <div class="widget-title"> <span class="icon"> <i class="icon-th"></i> </span>
+           <h5>查看模块列表</h5>
+         </div>
+         <div class="widget-content">
+          <div id="datagrid"></div>
+         </div>
+    </div>
+</div>
+
+<!---动作表单-->
+<div id="action_div" style="display:none;width:450px;height:350px;">
+    <form id="action_form" action="" method="post" class="form-horizontal">
+        <input type="hidden" id="pid" name="pid" class="ui-hidden" value="" />
+        <input type="hidden" name="id" value="" class="ui-hidden"/>
+        <div class="control-group">
+            <label class="control-label">动作标题 :</label>
+            <div class="controls">
+                <input type="text" id="action_title" for="action_form" name="title" class="ui-textbox" width="180" required />
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label">动作名称 :</label>
+            <div class="controls">
+                <input type="text" id="action_name" name="name" class="ui-textbox" width="180" required />
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label">动作图标 :</label>
+            <div class="controls">
+                <input type="hidden" id="action_icon" renderItem="renderIcon" onSelected="actionIconSelected" name="icon" class="ui-combobox" width="180" />
+                <span id="action_icon_show" class="help-inline icon" style="position: absolute;padding-top: 5px;font-size: 25px;line-height: 20px;height: 20px;color:#000;"></span>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label">是否隐藏 :</label>
+            <div class="controls">
+                <select id="action_hidden" name="hidden" class="ui-combobox" width="50" required>
+                    <option value="off" selected>显示</option>
+                    <option value="on">隐藏</option>
+                </select>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label">动作状态 :</label>
+            <div class="controls">
+                <select id="action_status" name="status" class="ui-combobox" width="50" required>
+                    <option value="on" selected>正常</option>
+                    <option value="off">禁用</option>
+                </select>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label">动作排序 :</label>
+            <div class="controls">
+                <input type="text" id="action_sort" name="sort" format="int" isNegative="false" value="0" required class="ui-spinner" width="50" />
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label">动作描述 :</label>
+            <div class="controls">
+                <textarea id="action_description" class="span3" name="description" width="180"></textarea>
+            </div>
+        </div>
+        <div class="form-actions span4">
+            <button type="submit" class="btn btn-success">保存</button>
+        </div>
+    </form>
+</div>
+
+<!---模块表单-->
+<div id="module_dialog" style="display:none;width:450px;height:350px;">
+            <form id="module_form" action="" method="post" class="form-horizontal">
+                <input type="hidden" name="id" class="ui-hidden" value="" />
+                <div class="control-group">
+                    <label class="control-label">模块标题 :</label>
+                    <div class="controls">
+                        <input type="text" id="title" name="title" class="ui-textbox" width="180" required />
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">模块名称 :</label>
+                    <div class="controls">
+                        <input type="text" id="name" name="name" class="ui-textbox" width="180" required />
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">模块图标 :</label>
+                    <div class="controls">
+                        <input type="hidden" id="icon" renderItem="renderIcon" onSelected="iconSelected" width="180" name="icon" class="ui-combobox" />
+                        <span id="icon_show" class="help-inline icon" style="position: absolute;padding-top: 5px;font-size: 25px;line-height: 20px;height: 20px;color:#000;"></span>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">关联数据表 :</label>
+                    <div class="controls">
+                        <input type="hidden" id="relate_table" name="relate_table" isShowCheckBox="true" isMultiSelect="true" split="," width="250" url="{{url('module/tableList')}}" class="ui-combobox" />
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">是否隐藏 :</label>
+                    <div class="controls">
+                        <select id="hidden" name="hidden" class="ui-combobox" width="50" required>
+                            <option value="off" selected>显示</option>
+                            <option value="on">隐藏</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">模块状态 :</label>
+                    <div class="controls">
+                        <select id="status" name="status" class="ui-combobox" width="50" required>
+                            <option value="on" selected>正常</option>
+                            <option value="off">禁用</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">模块排序 :</label>
+                    <div class="controls">
+                        <input type="text" id="sort" name="sort" format="int" isNegative="false" value="0" required class="ui-spinner" width="50" />
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">模块描述 :</label>
+                    <div class="controls">
+                        <textarea id="description" class="ui-textarea span3" name="description" width="180"></textarea>
+                    </div>
+                </div>
+                <div class="form-actions span4">
+                    <button type="submit" class="btn btn-success">保存</button>
+                </div>
+            </form>
+</div>
+
+<!---动作列表-->
+<div id="action_dialog" style="display:none;width:682px;height:350px;">
+    <div id="action_datagrid"></div>
+</div>
+
+<script>
+    var datagrid;
+    var dialog;
+    var module_form;
+    var action_form;
+    var action_dialog;
+    var action_form_dialog;
+    var action_datagrid;
+    var action_pid;
+    var menu;
+    $.ligerDefaults.Grid.formatters['icon'] = function (data, column){
+        return "<div class='icon "+ data + "'></div>";
+    };
+    $.ligerDefaults.Grid.formatters['hidden'] = function (data, column){
+        return (data == 'off') ? '显示' : '隐藏';
+    };
+    $.ligerDefaults.Grid.formatters['status'] = function (data, column){
+        return (data == 'off') ? '禁用' : '正常';
+    };
+    function renderIcon(icon){
+        return "<span class='icon "+ icon.value +"'>&nbsp;"+ icon.text +"</span>";
+    }
+    //模块图标选中事件
+    function iconSelected(value){
+        $('#icon_show').attr('class','help-inline icon '+value);
+    }
+    //动作图标选中事件
+    function actionIconSelected(value){
+        $('#action_icon_show').attr('class','help-inline icon '+value);
+    }
+    //创建控制器
+    function create_controller(){
+        var row = datagrid.getSelected();
+        if(!row){
+            $.ligerDialog.error('请选择要创建控制器的模块');
+            return false;
+        }else{
+            $('#module_form').ajaxForm("{{url('module/createController')}}",{module_id:row.id},function(response){
+                if(response.status == 0){
+                    $.ligerDialog.error(response.message);
+                }else{
+                    $.ligerDialog.success(response.message);
+                }
+            });
+        }
+    }
+
+    //创建模型
+    function create_model(){
+        var row = datagrid.getSelected();
+        if(!row){
+            $.ligerDialog.error('请选择要创建创建模型的模块');
+            return false;
+        }else{
+            $('#module_form').ajaxForm("{{url('module/createModel')}}",{module_id:row.id},function(response){
+                if(response.status == 0){
+                    $.ligerDialog.error(response.message);
+                }else{
+                    $.ligerDialog.success(response.message);
+                }
+            });
+        }
+    }
+
+    //创建验证器
+    function create_validator(){
+        var row = datagrid.getSelected();
+        if(!row){
+            $.ligerDialog.error('请选择创建验证器的模块');
+            return false;
+        }else{
+            $('#module_form').ajaxForm("{{url('module/createValidator/')}}",{module_id:row.id},function(response){
+                if(response.status == 0){
+                    $.ligerDialog.error(response.message);
+                }else{
+                    $.ligerDialog.success(response.message);
+                }
+            });
+        }
+    }
+
+    //显示动作列表
+    function action_show(){
+        var row = datagrid.getSelected();
+        if(!row){
+            $.ligerDialog.error('请选择要编辑动作的模块');
+            return false;
+        }else{
+            action_pid = row.id;
+            action_datagrid.setParm('pid',row.id);
+            action_datagrid.reload();
+            action_dialog._setTitle('管理 [ ' + row.title + ' ] 模块动作');
+            action_dialog.show();
+        }
+    }
+    //添加动作
+    function add_action(){
+        $('#action_form').clearForm();
+        action_form.setData({status:0,hidden:0,sort:0});
+        liger.get('action_status').setValue('on');
+        liger.get('action_hidden').setValue('off');
+        liger.get('action_sort').setValue('0');
+        $('#action_form').attr('action',"{{url('module/actionAdd')}}");
+        $('#pid').val(action_pid);
+        $('#action_icon_show').attr('class','help-inline icon');
+        action_form_dialog._setTitle('添加动作');
+        action_form_dialog.show();
+    }
+
+    //编辑动作
+    function edit_action(){
+        var row = action_datagrid.getSelected();
+        if(!row){
+            $.ligerDialog.error('请选择要编辑的动作');
+            return false;
+        }else{
+            $('#action_form').loadForm(row);
+            $('#action_icon_show').attr('class','help-inline icon ' + row.icon);
+        }
+        $('#action_form').attr('action',"{{url('module/actionEdit')}}");
+        action_form_dialog._setTitle('编辑动作');
+        action_form_dialog.show();
+    }
+    //刷新模块
+    function do_refresh(){
+        $('#action_form').ajaxForm("{{url('module/refresh')}}",{},function(response){
+            if(response.status == 0){
+                $.ligerDialog.error(response.message);
+            }else{
+                $.ligerDialog.success(response.message);
+                datagrid.reload();
+            }
+        });
+    }
+
+    //删除动作
+    function del_action(){
+        var row = action_datagrid.getSelected();
+        if(!row){
+            $.ligerDialog.error('请选择要删除的动作');
+            return false;
+        }else{
+            $.ligerDialog.confirm('确定要删除 [ '+ row.title +' ] 动作?', function (type) {
+                if(type){
+                    $('#action_form').ajaxForm("{{url('module/actionDelete')}}",{id:row.id},function(response){
+                        if(response.status == 0){
+                            $.ligerDialog.error(response.message);
+                        }else{
+                            $.ligerDialog.success(response.message);
+                            action_datagrid.reload();
+                        }
+                    });
+                }
+            });
+        }
+    }
+
+    //删除模块操作
+    function del(){
+        var row = datagrid.getSelected();
+        if(!row){
+            $.ligerDialog.error('请选择要删除的模块');
+            return false;
+        }else {
+            $.ligerDialog.confirm('确定要删除 [ '+ row.title +' ] 模块?', function (type) {
+                if(type){
+                    $('#module_form').ajaxForm("{{url('module/delete')}}",{id:row.id},function(response){
+                        if(response.status == 0){
+                            $.ligerDialog.error(response.message);
+                        }else{
+                            $.ligerDialog.success(response.message);
+                            datagrid.reload();
+                        }
+                    });
+                }
+            });
+        }
+    }
+    //添加模块操作
+    function add(){
+        dialog._setTitle('添加模块');
+        dialog.show();
+        $('#module_form').clearForm();
+        liger.get('status').setValue('on');
+        liger.get('hidden').setValue('off');
+        liger.get('sort').setValue('0');
+        $('#module_form').attr('action',"{{url('module/add')}}");
+        $('#icon_show').attr('class','help-inline icon');
+    }
+    //编辑模块操作
+    function edit(){
+        var row = datagrid.getSelected();
+        if(!row){
+            $.ligerDialog.error('请选择要编辑的模块');
+            return false;
+        }else{
+            $('#module_form').clearForm();
+            liger.get('relate_table').setValue('');
+            module_form.setData(row);
+            $('#icon_show').attr('class','help-inline icon ' + row.icon);
+        }
+        $('#module_form').attr('action',"{{url('module/edit')}}");
+        dialog._setTitle('编辑模块');
+        dialog.show();
+    }
+    //页面初始化
+    $(document).ready(function() {
+        action_dialog = $.ligerDialog({width:'695',height:'486',target: $("#action_dialog")});
+        action_dialog.hide();
+        dialog = $.ligerDialog({ width:'470',height:'540',target: $("#module_dialog") });
+        dialog.hide();
+        action_form_dialog = $.ligerDialog({width:'480',height:'520',target: $("#action_div") });
+        action_form_dialog.hide();
+
+        menu = $.ligerMenu({width:120,items:[{text:'编辑',click:edit,icon:'icon-edit'},{text:'动作管理',click:action_show,icon:'icon-magic'},{text:'删除',click:del,icon:'icon-trash'}]});
+        module_form = $('#module_form').ligerForm();//模块表单初始化
+        action_form = $('#action_form').ligerForm();//动作表单初始化
+        liger.get('icon').setUrl("{{url('index/loadIcon')}}");//载入模块图标
+        liger.get('action_icon').setUrl("{{url('index/loadIcon')}}");//载入动作图标
+
+        //动作表格初始化
+        action_datagrid = $("#action_datagrid").ligerGrid({
+            url: "{{url('module/actionList')}}",
+            toolbar: {
+                items: [
+                    {
+                        text: "新增",
+                        icon: "icon-plus-sign",
+                        click: add_action
+                    }, {
+                        text: "编辑",
+                        icon: "icon-edit",
+                        click: edit_action
+                    }, {
+                        text: "删除",
+                        icon: "icon-delete",
+                        click: del_action
+                    }
+                ]
+            },
+            columns: [
+                {display: '编号', name: 'id', align: 'center', width: 40},
+                {display: '动作标题', name: 'title', align: 'center', width: 100},
+                {display: '动作名称', name: 'name', width: 100 , align:'center'},
+                {display: '动作图标', name: 'icon', width: 60, align: 'center',type:'icon'},
+                {display: '动作描述', name: 'description', width: 140,editor: { type: 'text' }},
+                {display: '是否隐藏', name: 'hidden', width: 60, align:'center',type:'hidden'},
+                {display: '动作状态', name: 'status', width: 60, align:'center',type:'status'},
+                {display: '动作排序', name: 'sort'  , width: 60, align:'center'}
+            ], usepager:false,width: '682', height: '414', sortname: 'id', checkbox: false,whenrclicktoselect:true,delayload:true,ondblclickrow:edit_action
+        });
+        //模块表格初始化
+        datagrid = $("#datagrid").ligerGrid({
+            url: "{{url('module/list')}}",
+            toolbar: {
+                items: [
+                    {
+                        text: "新增",
+                        icon: "icon-plus-sign",
+                        click: add
+                    },{
+                        text: "编辑",
+                        icon: "icon-edit",
+                        click: edit
+                    },{
+                        text: "管理动作",
+                        icon: "icon-magic",
+                        click: action_show
+                    },{
+                        text: "刷新模块",
+                        icon: "icon-refresh",
+                        click: do_refresh
+                    },{
+                        text: "生成控制器",
+                        icon: "icon-cogs",
+                        click: create_controller
+                    },{
+                        text: "生成模型",
+                        icon: "icon-tasks",
+                        click: create_model
+                    },{
+                        text: "生成验证器",
+                        icon: "icon-eye-open",
+                        click: create_validator
+                    },{
+                        text: "删除",
+                        icon: "icon-trash",
+                        click: del
+                    }
+                ]
+            },
+            columns: [
+                {display: '编号', name: 'id', align: 'center', width: 60},
+                {display: '模块标题', name: 'title', align: 'right', width: 120},
+                {display: '模块名称', name: 'name', width: 180 , align:'left'},
+                {display: '模块图标', name: 'icon', width: 120, align: 'center',type:'icon'},
+                {display: '模块描述', name: 'description', width: 140},
+                {display: '是否隐藏', name: 'hidden', width: 120, align:'center',type:'hidden'},
+                {display: '模块状态', name: 'status', width: 120, align:'center',type:'status'},
+                {display: '模块排序', name: 'sort'  , width: 120, align:'center'}
+            ], usepager:false, width: '100%',height:'100%', sortname: 'id', checkbox: false,ondblClickRow:edit,whenrclicktoselect:true,onrclicktoselect:true, oncontextmenu : function (parm,e) {actionID = parm.data.id;menu.show({ top: e.pageY, left: e.pageX });return false;}
+        });
+        //模块表单提交
+        $("#module_form").validate({
+            submitHandler: function(form) {
+                var form_data = module_form.getData();
+                $('#module_form').ajaxForm($(form).attr('action'),form_data,function(response){
+                    if(response.status == 0){
+                        $.ligerDialog.error(response.message);
+                    }else{
+                        $.ligerDialog.success(response.message);
+                        datagrid.reload();
+                        dialog.hide();
+                    }
+                });
+            }
+        });
+        //动作表单提交
+        $("#action_form").validate({
+            submitHandler: function(form) {
+                var form_data = action_form.getData();
+                $("#action_form").ajaxForm($(form).attr('action'),form_data,function(response){
+                    if(response.status == 0){
+                        $.ligerDialog.error(response.message);
+                    }else{
+                        $.ligerDialog.success(response.message);
+                        action_datagrid.reload();
+                        action_form_dialog.hide();
+                    }
+                });
+            }
+        });
+    });
+</script>

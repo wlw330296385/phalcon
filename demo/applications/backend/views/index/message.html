@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>{{title}}-{{settings['SITE_NAME']}}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap-responsive.min.css" />
+    <link rel="stylesheet" type="text/css" href="/css/ui-style.css" />
+    <link rel="stylesheet" type="text/css" href="/css/jquery.gritter.css" />
+    <link rel="stylesheet" type="text/css" href="/css/font-awesome.min.css" />
+    <link rel="stylesheet" type="text/css" href="/css/font-glyphicons.css" />
+    <link rel="stylesheet" type="text/css" href="/css/ligerUI/css/all.css" />
+    <script type="text/javascript" src="/javascript/jquery.min.js"></script>
+    <!--[if lte IE 9]>
+    <script src="/javascript/respond.min.js"></script>
+    <script src="/javascript/html5shiv.min.js"></script>
+    <![endif]-->
+    <script type="text/javascript" src="/javascript/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/javascript/ligerui.min.js"></script>
+    <script type="text/javascript" src="/javascript/ligerui.extend.js"></script>
+</head>
+<body>
+<script>
+    $(function(){
+        $.ligerDialog.question('{{message}}');
+    });
+</script>
+</body>
+
+{%include "common/footer.html"%}

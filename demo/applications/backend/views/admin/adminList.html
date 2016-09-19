@@ -1,0 +1,263 @@
+<div class="container-fluid">
+    <div class="widget-box">
+        <div class="widget-title"><span class="icon"> <i class="icon-th"></i> </span>
+            <h5>查看用户列表</h5>
+        </div>
+        <div class="widget-content">
+            <div id="user_datagrid"></div>
+        </div>
+    </div>
+</div>
+
+
+<!---用户表单-->
+<div id="user_dialog" style="display:none;width:450px;height:350px;">
+    <form id="user_form" action="" method="post" autocomplete="off" class="form-horizontal"></form>
+</div>
+
+
+<script>
+    var group_list = {{group_list}};
+    var group_data = {{group_data}};
+    var user_datagrid;
+    var user_dialog;
+    var user_form;
+    var menu;
+    var group_id;
+
+    $.ligerDefaults.Grid.formatters['status'] = function (data, column) {
+        if (data == 'off') {
+            return "<span class='label label-important'>禁用</span>";
+        } else {
+            return "<span class='label label-success'>正常</span>";
+        }
+    };
+
+    $.ligerDefaults.Grid.formatters['group_format'] = function (data, column) {
+        return group_list[data] ? group_list[data]['text'] : null;
+    };
+
+    //添加
+    function add() {
+        $('#user_form').attr('action', '{{url("admin/adminAdd")}}').clearForm();
+        user_form.setData({group_id: 1, status: 'on', lang: 'zh_CN'});
+        $('#password').attr('required', {required: true});
+        user_dialog._setTitle('添加用户');
+        user_dialog.show();
+    }
+
+    //编辑
+    function edit() {
+        var row = user_datagrid.getSelected();
+        if (!row) {
+            $.ligerDialog.error('请选择要编辑的用户');
+            return false;
+        } else {
+            $('#user_form').attr('action', "{{url('admin/adminEdit')}}").clearForm();
+            user_dialog._setTitle('修改用户 [ ' + row.username + ' ]')
+            user_dialog.show();
+            $('#password').removeAttr('required');
+            user_form.setData(row);
+        }
+    }
+
+    //删除
+    function del() {
+        var row = user_datagrid.getSelected();
+        if (!row) {
+            $.ligerDialog.error('请选择要删除的用户');
+            return false;
+        } else {
+            if (row.id == '1') {
+                $.ligerDialog.error('默认管理员账号不能删除');
+                return;
+            }
+            $.ligerDialog.confirm('确定要删除 [ ' + row.username + ' ] 用户?', function (type) {
+                if (type) {
+                    $('#user_form').ajaxForm("{{url('admin/adminDelete')}}", {id: row.id}, function (response) {
+                        if (response.status == 0) {
+                            $.ligerDialog.error(response.message);
+                        } else {
+                            $.ligerDialog.success(response.message);
+                            user_datagrid.reload();
+                            user_dialog.hide();
+                        }
+                    });
+                }
+            });
+        }
+    }
+
+    $(function () {
+        menu = $.ligerMenu({
+            width: 120,
+            items: [{text: '编辑', click: edit, icon: 'icon-edit'}, {text: '删除', click: del, icon: 'icon-trash'}]
+        });
+        user_form = $('#user_form').ligerForm(
+                {
+                    inputwidth: 200,
+                    labelwidth: 80,
+                    space: 10,
+                    validate: true,
+                    righttoken: "&nbsp;",
+                    labelalign: "right",
+                    align: "left",
+                    fields: [
+                        {
+                            name: "id", newline: false, type: "hidden"
+                        }, {
+                            name: 'username',
+                            newline: true,
+                            type: 'textbox',
+                            display: '账号',
+                            aftercontent: '',
+                            width: 150,
+                            validate: {required: true},
+                            editor: {
+                                width: 150
+                            }
+                        }, {
+                            name: "password",
+                            newline: true,
+                            type: "password",
+                            display: "密码",
+                            aftercontent: "留空则不修改密码",
+                            width: 150,
+                            validate: {required: false},
+                            editor: {
+                                width: 150
+                            }
+                        }, {
+                            name: 'realname',
+                            newline: true,
+                            type: 'textbox',
+                            display: '姓名',
+                            aftercontent: '',
+                            width: 150,
+                            validate: {required: true},
+                            editor: {
+                                width: 150
+                            }
+                        }, {
+                            name: "group_id",
+                            newline: true,
+                            type: "combobox",
+                            display: "用户组",
+                            aftercontent: "",
+                            width: 180,
+                            validate: {required: true},
+                            editor: {
+                                cancelable: false,
+                                width: 180,
+                                ismultiselect: false,
+                                valuefield: 'id',
+                                data: group_data
+                            }
+                        },
+                        {
+                            name: "status",
+                            newline: true,
+                            type: "combobox",
+                            display: "状态",
+                            aftercontent: "",
+                            width: 80,
+                            validate: {required: true},
+                            editor: {
+                                width: 150,
+                                initvalue: 'on',
+                                cancelable: false,
+                                data: [{id: 'on', text: '正常'}, {id: 'off', text: '禁用'}]
+                            }
+                        },{
+                            name: 'comment',
+                            newline: true,
+                            type: 'textarea',
+                            display: '备注',
+                            aftercontent: '',
+                            width: 250,
+                            validate: {required: false},
+                            editor: {
+                                width: 250,
+                                height:80
+                            }
+                        }
+                    ]
+                });
+        user_dialog = $.ligerDialog({
+            title: '添加用户',
+            width: '470',
+            height: '420',
+            target: $('#user_dialog'),
+            buttons: [{
+                text: "确认提交",
+                icon: "icon-edit",
+                onclick: submitform
+            }]
+        });
+        user_dialog.hide();
+
+        function submitform() {
+            if (user_form.valid()) {
+                var form_data = user_form.getData();
+                $.post($('#user_form').attr('action'), form_data, function (response) {
+                    if (response.status == 0) {
+                        $.ligerDialog.error(response.message);
+                    } else {
+                        $.ligerDialog.success(response.message);
+                        user_datagrid.reload();
+                        user_dialog.hide();
+                    }
+                });
+            } else {
+                $.ligerDialog.error("表单没有通过验证,请检查红色标记的表单项");
+            }
+        }
+        user_datagrid = $("#user_datagrid").ligerGrid({
+                    url: "{{url('admin/adminList')}}",
+                    columns: [
+                        {display: '编号', name: 'id', width: 50, type: 'int', align: 'center'},
+                        {display: '账号', name: 'username', id: 'username', width: 120, align: 'center'},
+                        {display: '真实姓名', name: 'realname', width: 120, align: 'center'},
+                        {display: '用户组', name: 'group_id', width: 120, align: 'center', type: 'group_format'},
+                        {display: '登陆IP', name: 'login_ip', width: 140, align: 'center'},
+                        {display: '登陆时间', name: 'login_time', width: 160, align: 'center'},
+                        {display: '登陆次数', name: 'login_total', width: 80, align: 'center'},
+                        {display: '状态', name: 'status', width: 50, align: 'center', type: 'status'},
+                        {display: '备注', name: 'comment', width: 140, align: 'center'}
+                    ],
+                    toolbar: {
+                        items: [
+                            {
+                                text: "添加",
+                                icon: "icon-plus-sign",
+                                click: add
+                            },
+                            {
+                                text: "编辑",
+                                icon: "icon-edit",
+                                click: edit
+                            },
+                            {
+                                text: "删除",
+                                icon: "icon-trash",
+                                click: del
+                            }
+
+                        ]
+                    },
+                    width: '100%',
+                    height: '100%',
+                    usepager: true,
+                    inwindow: false,
+                    alternatingrow: false,
+                    whenrclicktoselect: true,
+                    ondblclickrow: edit,
+                    oncontextmenu: function (parm, e) {
+                        actionid = parm.data.id;
+                        menu.show({top: e.pageY, left: e.pageX});
+                        return false;
+                    }
+                }
+        );
+    });
+</script>

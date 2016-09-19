@@ -1,0 +1,433 @@
+<div class="container-fluid">
+    <div id="item_dialog" style="display:none;width:450px;height:250px;">
+        <form id="item_form" action="" method="post" class="form-horizontal">
+            <input type="hidden" id="item_action" name="item_action" class="ui-hidden" value="" />
+            <div class="control-group">
+                <label class="control-label">名称 :</label>
+                <div class="controls">
+                    <input type="text" name="text" class="ui-textbox" required />
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">值 :</label>
+                <div class="controls">
+                    <input type="text" name="id" class="ui-textbox" required />
+                </div>
+            </div>
+            <div class="control-group" id="pid_div" style="display:none;">
+                <label class="control-label">上级编号 :</label>
+                <div class="controls">
+                    <input type="hidden" id="pid" name="pid" class="ui-combobox" />
+                </div>
+            </div>
+            <div class="form-actions span4">
+                <button type="submit" class="btn btn-success">保存</button>
+            </div>
+        </form>
+    </div>
+    <div class="widget-box">
+        <div class="widget-title"> <span class="icon"> <i class="icon-th"></i> </span>
+            <h5>添加系统配置项</h5>
+        </div>
+        <form id="form1" action="{{url('setting/add')}}" method="post" class="form-horizontal" height="100%">
+        <div class="widget-content" style="padding:2px 2px 4px 2px">
+                <div class="control-group">
+                    <label class="control-label">配置名称</label>
+                    <div class="controls">
+                        <input type="text"  name="title" class="ui-textbox">
+                        <span class="help-inline"></span>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">配置键名</label>
+                    <div class="controls">
+                        <input type="text"  name="name" class="ui-textbox">
+                        <span class="help-inline">不能重复,只能英文+数字</span>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">配置值</label>
+                    <div class="controls">
+                        <input type="text" name="value" class="ui-textbox">
+                        <span class="help-inline">可为空</span>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">配置类型</label>
+                    <div class="controls">
+                        <input type="hidden" id="type" width="120" name="type" onSelected="select_type" class="ui-combobox" data="[{id:'textbox',text:'文本框'},{id:'password',text:'密码框'},{id:'date',text:'日期选择框'},{id:'datetime',text:'日期时间选择框'},{id:'time',text:'时间选择框'},{id:'currency',text:'金额输入框'},{id:'number',text:'浮点输入框'},{id:'integer',text:'整数输入框'},{id:'hidden',text:'隐藏域'},{id:'image',text:'图片上传'},{id:'file',text:'文件上传'},{id:'button',text:'按钮'},{id:'textlink',text:'文本连接'},{id:'combobox',text:'下拉框'},{id:'radio',text:'单选框'},{id:'checkbox',text:'多选框'},{id:'popup',text:'弹出框'},{id:'listbox',text:'列表框'},{id:'textarea',text:'多行文本框'},{id:'editor',text:'百度编辑器'}]">
+                        <span class="help-inline"></span>
+                    </div>
+                </div>
+
+                <div class="control-group" id="_onclick" style="display:none;">
+                    <label class="control-label">点击触发事件</label>
+                    <div class="controls">
+                        <input type="text"  name="onclick" class="ui-textbox">
+                        <span class="help-inline">点击触发的JS函数</span>
+                    </div>
+                </div>
+
+                <div class="control-group" id="source_type" style="display:none;">
+                    <label class="control-label">数据选项</label>
+                    <div class="controls controls-row">
+                        <div>
+                            <span class="text-on">数据来源</span>
+                            <select name="data_source" onSelected="select_source" class="ui-combobox" width="80">
+                                <option value="custom">自定义</option>
+                                <option value="database">数据库</option>
+                                <option value="server_data">AJAX请求</option>
+                            </select>
+                        </div>
+                        <div>
+                            <span class="text-on">下拉类型</span>
+                            <select name="combo_type" class="ui-combobox" width="80">
+                                <option value="normal">普通下拉</option>
+                                <option value="grid">表格下拉</option>
+                                <option value="tree">树形下拉</option>
+                            </select>
+                        </div>
+                        <div>
+                            <span class="text-on">是否多选</span>
+                            <select name="is_multi" class="ui-combobox" width="40">
+                                <option value="off">否</option>
+                                <option value="on">是</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="control-group" id="data_server" style="display:none">
+                    <label class="control-label">Ajax URL</label>
+                    <div class="controls">
+                        <input type="text"  name="server_url" class="ui-textbox">
+                        <span class="help-inline"></span>
+                    </div>
+                </div>
+
+                <div class="control-group" id="data_option">
+                    <label class="control-label">选项值</label>
+                    <div class="controls">
+                        <div style="width:255px;border: 1px solid #CDCDCD;"><div id="option_grid"></div></div>
+                    </div>
+                </div>
+
+                <div class="control-group" id="db_source" style="display:none;">
+                    <label class="control-label">选项值</label>
+                    <div class="controls controls-row">
+                        <div>
+                            <span class="text-on">数据表</span>
+                            <input type="hidden" id="data_table" onSelected="select_table" name="data_table" class="ui-combobox" width="120">
+                        </div>
+                        <div>
+                            <span class="text-on">编号字段</span>
+                            <input type="hidden" id="data_id" name="data_id" class="ui-combobox" width="120">
+                        </div>
+                        <div>
+                            <span class="text-on">文本字段</span>
+                            <input type="hidden" id="data_title" name="data_title" class="ui-combobox" width="120">
+                        </div>
+                        <div id="data_pid_div" style="display:none;">
+                            <span class="text-on">上级编号字段</span>
+                            <input type="hidden" id="data_pid" name="data_pid" class="ui-combobox" width="120">
+                        </div>
+                        <span class="help-inline"></span>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label">默认值</label>
+                    <div class="controls">
+                        <input type="text"  name="default_value" class="ui-textbox">
+                        <span class="help-inline">可为空</span>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">是否只读</label>
+                    <div class="controls">
+                        <select name="read_only" class="ui-combobox" width="40">
+                            <option value="off">否</option>
+                            <option value="on">是</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">是否系统内置</label>
+                    <div class="controls">
+                        <select name="is_sys" onSelected="select_issys"  class="ui-combobox" width="40">
+                            <option value="on">是</option>
+                            <option value="off">否</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="control-group" id="module_div" style="display:none">
+                    <label class="control-label">所属配置</label>
+                    <div class="controls">
+                        <input type="text"  name="category" class="ui-textbox">
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">所属标签页</label>
+                    <div class="controls">
+                        <input type="text"  name="tab_name" class="ui-textbox">
+                        <span class="help-inline">使用标签页切换</span>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">所属分组</label>
+                    <div class="controls">
+                        <input type="text"  name="group_name" class="ui-textbox">
+                        <span class="help-inline">对相关的设置进行分组</span>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">是否允许为空</label>
+                    <div class="controls">
+                        <select name="allow_empty" class="ui-combobox" width="40">
+                            <option value="on">是</option>
+                            <option value="off">否</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">输入限制</label>
+                    <div class="controls controls-row">
+                        <div>
+                            <span class="text-on">最小字符</span>
+                            <input type="text" name="min_length" class="ui-spinner" format="int" isNegative="false" width="40" value="0">
+                        </div>
+                        <div>
+                            <span class="text-on">最大字符</span>
+                            <input type="text" name="max_length" class="ui-spinner" format="int" isNegative="false" width="40" value="0">
+                        </div>
+                        <div>
+                            <span class="text-on">验证规则</span>
+                            <select name="validator" class="ui-combobox" width="100">
+                                <option value="required">不为空</option>
+                                <option value="email">邮件地址</option>
+                                <option value="url">网址</option>
+                                <option value="date">日期时间</option>
+                                <option value="number">浮点数</option>
+                                <option value="digits">正整数</option>
+                                <option value="creditcard">信用卡</option>
+                            </select>
+                        </div>
+                        <span class="help-inline">0为不限制 当为数字类型时限制为数字范围而非字符长度</span>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">控件尺寸</label>
+                    <div class="controls controls-row">
+                        <div>
+                            <span class="text-on">宽度</span>
+                            <input type="text" name="size_width" class="ui-spinner" format="int" isNegative="false" width="40" data-value="0">
+                        </div>
+                        <div>
+                            <span class="text-on">高度</span>
+                            <input type="text" name="size_height" class="ui-spinner" format="int" isNegative="false" width="40" data-value="0">
+                        </div>
+                        <span class="help-inline">0为默认宽高</span>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">提示信息</label>
+                    <div class="controls">
+                        <input type="text"  name="hint" class="ui-textbox">
+                        <span class="help-inline">可为空</span>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">配置描述</label>
+                    <div class="controls">
+                        <input type="text"  name="description" class="ui-textbox">
+                        <span class="help-inline">可为空</span>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">排序编号</label>
+                    <div class="controls">
+                        <input type="text" name="sort" class="ui-spinner" format="int" isNegative="false" width="40" data-value="0">
+                        <span class="help-inline">倒序排序</span>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button id="submit" type="submit" class="btn btn-success">保存</button>
+                </div>
+        </div>
+        </form>
+    </div>
+</div>
+<script>
+    var form;
+    var item_form;
+    var item_dialog;
+    var option_grid;
+    var type_list = ['combobox','checkbox','tree','radio','listbox'];
+    $(function () {
+        option_grid = $("#option_grid").ligerGrid({
+            height:'200',
+            width:'255',
+            columns: [
+                { display:'名称',name: 'text',id:'name',width:150},
+                { display:'值',name: 'id',id:'id',align:'left',width:80}
+            ], usepager:false ,alternatingrow: false, tree: {
+                columnid: 'name',
+                idfield: 'id',
+                parentidfield: 'pid'
+            },
+            toolbar: { items: [
+                { text: '增加', action:'add',click: itemclick, icon: 'icon-plus-sign' },
+                { line: true },
+                { text: '修改', action:'edit', click: itemclick, icon: 'icon-edit' },
+                { line: true },
+                { text: '删除', action:'delete', click: itemclick,icon:'icon-remove'}
+            ]
+            }
+        });
+        form = $('#form1').ligerForm();
+        form.setData({type:'textbox'});
+        item_form = $('#item_form').ligerForm();
+        $('#data_option').css('display','none');
+        item_dialog = $.ligerDialog({ title:'',width:'380',height:'250',target: $("#item_dialog") });
+        item_dialog.hide();
+        $("#item_form").validate({
+            submitHandler: function(form) {
+                var form_data = item_form.getData();
+                form_data['pid'] = (form_data['pid'] == '') ? null : form_data['pid'];
+                if(form_data['item_action'] == 'add'){
+                    option_grid.addRow({id:form_data['id'],text:form_data['text'],pid:form_data['pid']});
+                }else{
+                    var row = option_grid.getSelected();
+                    option_grid.updateRow(row,{id:form_data['id'],text:form_data['text'],pid:form_data['pid']});
+                }
+                item_dialog.hide();
+            }
+        });
+        $('#submit').on('click',function(){
+            if(form.valid()){
+                var form_data = form.getData();
+                if(type_list.indexOf(form_data['type']) != -1){
+                    if(form_data['data_source'] == 'custom'){
+                        form_data['data'] = option_grid.getData();
+                    }
+                }
+                $('#form').ajaxForm($('#form').attr('action'), form_data, function (response) {
+                    if (response.status == 0) {
+                        $.ligerDialog.error(response.message);
+                    } else {
+                        $.ligerDialog.success(response.message);
+                    }
+                });
+            }else{
+                $.ligerDialog.error("部分字段没有填写或者填写错误");
+            }
+            return false;
+        });
+    });
+    function itemclick(item){
+        if(item.action == 'add'){
+            item_dialog._setTitle('添加配置项');
+            $('#item_form').clearForm();
+            liger.get('pid').set({data:option_grid.getData()});
+            item_form.setData({id:'',text:'',pid:'',item_action:'add'});
+            item_dialog.show();
+        }else if(item.action == 'edit'){
+            item_dialog._setTitle('编辑配置项');
+            var row = option_grid.getSelected();
+            if(!row){
+                $.ligerDialog.error('请选择要编辑的配置项');
+                return false;
+            }
+            liger.get('pid').set({data:option_grid.getData()});
+            item_form.setData(row);
+            item_form.setData({item_action:'edit'});
+            item_dialog.show();
+        }else{
+            var row = option_grid.getSelected();
+            if(!row){
+                $.ligerDialog.error('请选择要删除的配置项');
+                return false;
+            }else{
+                $.ligerDialog.confirm('确定要删除 [ '+ row.text +' ] 配置项?', function (type) {
+                    if(type){
+                        option_grid.remove(row);
+                    }
+                });
+            }
+        }
+    }
+
+    function select_table(value){
+        $.ajax({
+           type:'POST',
+            url:'{{url("setting/getTableColumn")}}',
+            data:{table_name:value},
+            dataType:'json',
+            success:function(data){
+                liger.get('data_id').set({data:data});
+                liger.get('data_title').set({data:data});
+                liger.get('data_pid').set({data:data});
+            }
+        });
+    }
+
+    function select_source(value){
+        if(value == 'custom'){
+            $('#db_source').css('display','none');
+            $('#data_server').css('display','none');
+            $('#data_option').css('display','');
+        }else if(value == 'server_data'){
+            $('#db_source').css('display','none');
+            $('#data_server').css('display','');
+            $('#data_option').css('display','none');
+        }else{
+            $('#db_source').css('display','');
+            $('#data_server').css('display','none');
+            $('#data_option').css('display','none');
+            liger.get('data_table').set({url:"{{url('setting/getTableList')}}"});
+        }
+    }
+
+    function select_issys(value){
+        if(value == 'off'){
+            $('#module_div').css('display','');
+        }else{
+            liger.get('module_id').selectValue('');
+            $('#module_div').css('display','none');
+        }
+    }
+    function select_type(value){
+        $('#data_pid_div').css('display','none');
+        $('#pid_div').css('display','none');
+        if(value == 'title' || value == 'button' || value == 'textlink'){
+            form.setData({read_only:'on',allow_empty:'on'});
+        }else{
+            form.setData({read_only:'off',allow_empty:'off'});
+        }
+        if(value == 'button' || value == 'textlink'){
+            $('input[name="value"],input[name="default"],input[name="min_length"]').closest('.control-group').hide();
+            $('#_onclick').css('display','');
+        }else{
+            $('input[name="value"],input[name="default"],input[name="min_length"]').closest('.control-group').show();
+            $('#_onclick').css('display','none');
+        }
+        if(value == 'image' || value == 'file'){
+            $('#data_server').css('display','');
+        }else{
+            $('#data_server').css('display','none');
+            if(type_list.indexOf(value) == -1){
+                $('#data_option').css('display','none');
+                $('#source_type').css('display','none');
+                $('#data_server').css('display','none');
+            }else{
+                $('#data_option').css('display','');
+                $('#source_type').css('display','');
+                if(value == 'tree'){
+                    $('#pid_div').css('display','');
+                    $('#data_pid_div').css('display','');
+                }
+            }
+        }
+    }
+</script>

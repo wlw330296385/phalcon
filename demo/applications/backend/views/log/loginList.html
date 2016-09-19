@@ -1,0 +1,190 @@
+<div class="container-fluid">
+    <div class="widget-box">
+        <div class="widget-title"> <span class="icon"> <i class="icon-th"></i> </span>
+            <h5>登陆日志列表</h5>
+        </div>
+        <div class="widget-content">
+            <div id="datagrid"></div>
+            <div id="search_window">
+                <form id="search_form" name="search_form" action="" method="post" class="form-horizontal"></form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var datagrid;
+    var search_window;
+    var search_form;
+    var view_dialog;
+    var default_search_data = {username:'',ip:'',area:'',type:'',status:''};
+
+    $.ligerDefaults.Grid.formatters['status'] = function (data, column){
+        return (data == 'off') ? '禁用' : '正常';
+    };
+
+    $.ligerDefaults.Grid.formatters['usertype_render'] = function(data,column){
+        if(data == 'front'){
+            return "<span class='label label-info'>前台</span>";
+        }else{
+            return "<span class='label label-inverse'>后台</span>";
+        }
+    };
+
+    $.ligerDefaults.Grid.formatters['login_status_render'] = function(data,column){
+        if(data == 'off'){
+            return "<span class='label label-important'>失败</span>";
+        }else{
+            return "<span class='label label-success'>成功</span>";
+        }
+    };
+
+    $.ligerDefaults.Grid.formatters['_render'] = function(data,column){
+        return "<span class='by label'>"+data+"</span>";
+    };
+
+
+    $(function(){
+        search_form = $('#search_form').ligerForm({
+            inputwidth: 500,
+            labelwidth: 120,
+            space: 10,
+            validate: true,
+            righttoken: "&nbsp;",
+            labelalign: "right",
+            align: "left",
+            fields: [
+                {
+                    name: "username",
+                    newline: true,
+                    type: "textbox",
+                    display: "账号",
+                    width: 200,
+                    height: 30,
+                    aftercontent: '',
+                    validate: { required: false },
+                    editor: {width: 200}
+                }, {
+                    name: "ip",
+                    newline: true,
+                    type: "textbox",
+                    display: "登陆IP",
+                    aftercontent:"",
+                    width: 200,
+                    validate: { required: false },
+                    editor: {
+                        width: 200
+                    }
+                }, {
+                    name: "area",
+                    newline: true,
+                    type: "textbox",
+                    display: "登陆区域",
+                    aftercontent:"",
+                    width: 200,
+                    validate: { required: false },
+                    editor: {
+                        width: 200
+                    }
+                },
+                {
+                    name: "type",
+                    newline: true,
+                    type: "combobox",
+                    display: "账号类型",
+                    width: 60,
+                    height: 30,
+                    validate: { required: true },
+                    editor: {
+                        cancelable:false,
+                        data: [
+                            {id:'',text:'全部'},{id:'backend',text:'后台'},{id:'front',text:'前台'}
+                        ]
+                    }
+                },
+                {
+                    name: "status",
+                    newline: true,
+                    type: "combobox",
+                    display: "登陆状态",
+                    width: 60,
+                    height: 30,
+                    validate: { required: true },
+                    editor: {
+                        cancelable:false,
+                        data: [
+                            {id:'',text:'全部'},{id:'on',text:'成功'},{id:'off',text:'失败'}
+                        ]
+                    }
+                }]
+        });
+        search_window = $.ligerDialog({
+            width: 550,
+            height: 310,
+            target: $('#search_window'),
+            modal: true,
+            show: false,
+            title: "搜索",
+            slide: true,
+            buttons: [
+                {
+                    text: "确认搜索",
+                    icon: "icon-search",
+                    onclick: function(){
+                        var search_data = search_form.getData();
+                        for(key in search_data){
+                            datagrid.setParm(key,search_data[key]);
+                        }
+                        datagrid.reload();
+                    }
+                },
+                {
+                    text: "重置搜索",
+                    icon: "icon-reset",
+                    onclick: function(){
+                        var search_data = search_form.getData();
+                        search_form.setData(default_search_data);
+                        for(var key in search_data){
+                            datagrid.removeParm(key);
+                        }
+                        datagrid.reload();
+                    }
+                }
+            ]
+        });
+        search_window.hide();
+        datagrid = $("#datagrid").ligerGrid({
+                    url:"{{url('log/loginList')}}",
+                    columns: [
+                        { display: '编号', name: 'id',width: 50, type: 'int', align: 'center' },
+                        { display: '登陆类型', name: 'login_usertype',width: 65, align: 'center',type:'usertype_render' },
+                        { display: '登陆账号', name: 'login_username', width: 120, align: 'center' },
+                        { display: '登陆密码', name: 'login_password', width: 120, align: 'center' },
+                        { display: '登陆时间', name: 'login_time', width: 150, align: 'center' },
+                        { display: '登陆IP', name: 'login_ip', width: 120, align: 'center' },
+                        { display: '登陆地区', name: 'login_area', width: 250, align: 'center' },
+                        { display: '登陆状态', name: 'login_status', width: 65, align: 'center',type:'login_status_render'}
+                    ],
+                toolbar: {
+                    items: [
+                        {
+                            text: "刷新",
+                            icon: "icon-refresh",
+                            click: function(){
+                                window.location.reload();
+                            }
+                        },
+                        {
+                            text: "搜索",
+                            icon: "icon-search",
+                            click: function(){
+                                search_window.show();
+                            }
+                        }
+                    ]
+                },
+                usepager:true,width: '100%',height:'100%', sortname: 'id',whenrclicktoselect:true, sortorderparmname:'desc', checkbox: false
+                }
+        );
+    });
+</script>

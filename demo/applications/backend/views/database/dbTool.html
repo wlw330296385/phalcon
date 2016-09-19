@@ -1,0 +1,137 @@
+<div class="container-fluid">
+    <div class="widget-box">
+        <div class="widget-title"><span class="icon"> <i class="icon-th"></i> </span>
+            <h5>{{title}}</h5>
+        </div>
+        <div class="widget-content">
+            <div id="datagrid"></div>
+        </div>
+        <div id="restore_dialog" style="display:none;width:450px;height:80px;">
+        <ul class="unstyled" style="padding:10px;width:440px;height:60px;">
+            <li>
+                <span class="icon24 icomoon-icon-arrow-up-2 green"></span>总进度<span class="pull-right strong" id="tool_step">正在处理</span>
+                <div class="progress progress-danger progress-striped ">
+                    <div id="tool_progress" style="width: 0%;" class="bar"></div>
+                </div>
+            </li>
+        </ul>
+    </div>
+    </div>
+</div>
+
+<script>
+    var datagrid;
+    var table_list = [];
+    var max_progress = 0;
+    var tool_dialog;
+    var action_list = {repair: '修复', 'check': '检查', optimize: '优化', analyze: '分析'};
+    function check_list() {
+        table_list = [];
+        var rows = datagrid.getSelectedRows();
+        if (rows.length == 0) {
+            $.ligerDialog.error('请选择数据表');
+            return false;
+        }
+        for (var row in rows) {
+            table_list.push(rows[row]['Name']);
+        }
+        max_progress = table_list.length;
+        return true;
+    }
+    function do_loop(action) {
+        var table_name = table_list.shift();
+        if (table_name) {
+            $('#restore_dialog').ajaxForm("{{url('database/dbTool')}}?method=" + action, {table: table_name}, function (text) {
+                var tool_progress = Math.ceil(((max_progress - table_list.length) / max_progress) * 100);
+                $('#tool_step').html('正在' + action_list[action] + '[' + table_name + ']');
+                $('#tool_progress').css('width', tool_progress + '%');
+                do_loop(action);
+            });
+        } else {
+            $('#tool_step').html('正在处理');
+            $('#tool_progress').css('width', '0%');
+            tool_dialog.hide();
+            datagrid.reload();
+            table_list = [];
+        }
+
+    }
+    function db_analyze() {
+        if (check_list()) {
+            tool_dialog._setTitle('分析数据库');
+            tool_dialog.show();
+            do_loop('analyze');
+        }
+    }
+    function db_check() {
+        if (check_list()) {
+            tool_dialog._setTitle('检查数据库');
+            tool_dialog.show();
+            do_loop('check');
+        }
+    }
+    function db_optimize() {
+        if (check_list()) {
+            tool_dialog._setTitle('优化数据库');
+            tool_dialog.show();
+            do_loop('optimize');
+        }
+    }
+    function db_repair() {
+        if (check_list()) {
+            tool_dialog._setTitle('修复数据库');
+            tool_dialog.show();
+            do_loop('repair');
+        }
+    }
+    $(function () {
+        tool_dialog = $.ligerDialog({title: '处理进度', width: '480', height: '170', target: $("#restore_dialog")});
+        tool_dialog.hide();
+        datagrid = $("#datagrid").ligerGrid({
+                    url: "{{url('database/dbTool')}}&method=getTableList",
+                    toolbar: {
+                        items: [
+                            {
+                                text: "分析数据库",
+                                icon: "gi gi-database_minus",
+                                click: db_analyze
+                            }, {
+                                text: "检查数据库",
+                                icon: "gi gi-database_ban",
+                                click: db_check
+                            }, {
+                                text: "优化数据库",
+                                icon: "gi gi-database_lock",
+                                click: db_optimize
+                            }, {
+                                text: "修复数据库",
+                                icon: "gi gi-database_plus",
+                                click: db_repair
+                            }
+                        ]
+                    },
+                    columns: [
+                        {display: '表名', name: 'Name', width: 150, align: 'right'},
+                        {display: '记录数量', name: 'Rows', width: 60, align: 'center'},
+                        {display: '行存储格式', name: 'Row_format', width: 80, align: 'center'},
+                        {display: '自动递增值', name: 'Auto_increment', width: 80, align: 'center'},
+                        {display: '平均行的长度', name: 'Avg_row_length', width: 90, align: 'center'},
+                        {display: '数据文件长度', name: 'Data_length', width: 90, align: 'center'},
+                        {display: '数据表引擎', name: 'Engine', width: 80, align: 'center'},
+                        {display: '索引文件长度', name: 'Index_length', width: 100, align: 'center'},
+                        {display: '排序规则', name: 'Collation', width: 140, align: 'center'},
+                        {display: '备注内容', name: 'Comment', width: 200, align: 'left'}
+
+                    ],
+                    usepager: false,
+                    width: '100%',
+                    height: '100%',
+                    sortname: 'id',
+                    sortorderparmname: 'desc',
+                    whenrclicktoselect: true,
+                    checkbox: true
+                }
+        );
+
+    });
+</script>

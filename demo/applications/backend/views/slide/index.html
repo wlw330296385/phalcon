@@ -1,0 +1,505 @@
+<div class="container-fluid">
+    <div class="widget-box">
+        <div class="widget-title"><span class="icon"> <i class="icon-th"></i> </span>
+            <h5>{{title}}</h5>
+        </div>
+        <div class="widget-content">
+            <div id='datagrid'></div>
+            <div id="item_win">
+                <div id='item_datagrid'></div>
+            </div>
+            <div id="item_formwin">
+                <form id="item_form"></form>
+            </div>
+            <div id='win'>
+                <form id='form1' action="" method="post"></form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    var datagrid;
+    var form1;
+    var form1_defaults = {name:'',module_id:0,action_id:0,status:'regular'};
+    var item_form_defaults = {title:'',pid:0,image:'',link:'',description:'',status:''};
+    var win;
+    var item_win;
+    var item_form;
+    var item_datagrid;
+
+    $.ligerDefaults.Grid.formatters['formatStatus'] = function (data, column) {
+        var list = {regular: '正常', singular: '禁用'};
+        return list[data] ? list[data] : data;
+    };
+
+
+    //添加操作
+    function add() {
+        form1.setData(form1_defaults);
+        $('#form1').attr('action', "{{url('slide/add')}}");
+        win._setTitle('添加幻灯片');
+        win.show();
+    }
+
+    //幻灯片子项内容
+    function item_view(){
+        var row = datagrid.getSelected();
+        if (!row) {
+            $.ligerDialog.error('请选择要编辑的幻灯片子项内容');
+            return false;
+        }
+        item_datagrid.set({
+            url:'{{url("slide/getItem")}}',
+            parms:{pid:row.id}
+        });
+        item_win._setTitle('编辑 [' + row.name + '] 幻灯片子项内容');
+        item_win.show();
+    }
+
+    //编辑操作
+    function edit() {
+        var row = datagrid.getSelected();
+        if (!row) {
+            $.ligerDialog.error('请选择要编辑的幻灯片内容');
+            return false;
+        } else {
+            form1.getEditor('action_id').setParm('module_id',row.module_id);
+            form1.getEditor('action_id').reload();
+            form1.setData(row);
+        }
+        $('#form1').attr('action', "{{url('slide/edit')}}");
+        win._setTitle('编辑 [' + row.name + '] 幻灯片内容');
+        win.show();
+    }
+
+    //删除操作
+    function del() {
+        var row = datagrid.getSelected();
+        if (!row) {
+            $.ligerDialog.error('请选择要删除的幻灯片内容');
+            return false;
+        } else {
+            $.ligerDialog.confirm('确定要删除 [ ' + row.name + ' ] 幻灯片?', function (type) {
+                if (type) {
+                    $('#form1').ajaxForm("{{url('slide/delete')}}", {id: row.id}, function (response) {
+                        if (response.status == 0) {
+                            $.ligerDialog.error(response.message);
+                        } else {
+                            $.ligerDialog.success(response.message);
+                            datagrid.reload();
+                        }
+                    });
+                }
+            });
+        }
+    }
+
+    function add_item(){
+        var row = datagrid.getSelected();
+        item_form.setData(item_form_defaults);
+        item_form.setData({pid:row.id});
+        $('#item_form').attr('action', "{{url('slide/addItem')}}");
+        item_formwin._setTitle('添加幻灯片子项');
+        item_formwin.show();
+    }
+
+    function edit_item(){
+        var row = item_datagrid.getSelected();
+        if (!row) {
+            $.ligerDialog.error('请选择要编辑的幻灯片子项内容');
+            return false;
+        } else {
+            item_form.setData(row);
+        }
+        $('#item_form').attr('action', "{{url('slide/editItem')}}");
+        item_formwin._setTitle('编辑 [' + row.title + '] 幻灯片子项内容');
+        item_formwin.show();
+    }
+
+    function del_item(){
+        var row = item_datagrid.getSelected();
+        if (!row) {
+            $.ligerDialog.error('请选择要删除的幻灯片子项内容');
+            return false;
+        } else {
+            $.ligerDialog.confirm('确定要删除 [ ' + row.title + ' ] 幻灯片子项?', function (type) {
+                if (type) {
+                    $('#item_form').ajaxForm("{{url('slide/deleteItem')}}", {id: row.id}, function (response) {
+                        if (response.status == 0) {
+                            $.ligerDialog.error(response.message);
+                        } else {
+                            $.ligerDialog.success(response.message);
+                            item_datagrid.reload();
+                        }
+                    });
+                }
+            });
+        }
+    }
+
+    function select_module(value,text){
+        form1.getEditor('action_id').setParm('module_id',value);
+        form1.getEditor('action_id').reload();
+    }
+
+    //提交表单
+    function submititem() {
+        if (item_form.valid()) {
+            var form_data = item_form.getData();
+            $.post($('#item_form').attr('action'), form_data, function (response) {
+                if (response.status == 0) {
+                    $.ligerDialog.error(response.message);
+                } else {
+                    $.ligerDialog.success(response.message);
+                    item_datagrid.reload();
+                    item_formwin.hide();
+                }
+            });
+        } else {
+            $.ligerDialog.error("表单没有通过验证,请检查红色标记的表单项");
+        }
+    }
+
+
+    //提交表单
+    function submitform() {
+        if (form1.valid()) {
+            var form_data = form1.getData();
+            $.post($('#form1').attr('action'), form_data, function (response) {
+                if (response.status == 0) {
+                    $.ligerDialog.error(response.message);
+                } else {
+                    $.ligerDialog.success(response.message);
+                    datagrid.reload();
+                    win.hide();
+                }
+            });
+        } else {
+            $.ligerDialog.error("表单没有通过验证,请检查红色标记的表单项");
+        }
+    }
+
+    $(function () {
+        datagrid = $('#datagrid').ligerGrid({
+            width: "100%",
+            height: "100%",
+            url: "{{url('slide/index')}}",
+            columns: [{
+                display: "编号",
+                name: "id",
+                align: "center",
+                width: 40,
+                minwidth: 40,
+                frozen: true
+            }, {
+                display: "幻灯片名称",
+                name: "name",
+                align: "center",
+                width: 150,
+                minwidth: 60
+            }, {
+                display: "模块名称",
+                name: "module_name",
+                align: "center",
+                width: 150,
+                minwidth: 60
+            }, {
+                display: "动作名称",
+                name: "action_name",
+                align: "center",
+                width: 200,
+                minwidth: 60
+            }, {
+                display: "创建人",
+                name: "admin_user",
+                align: "center",
+                width: 150
+            }, {
+                display: "创建时间",
+                name: "create_time",
+                align: "center",
+                format:'Y-m-d H:i',
+                type:'date',
+                width: 120
+            }, {
+                display: "状态",
+                name: "status",
+                align: "center",
+                type:'formatStatus',
+                width: 80
+            }],
+            frozen: true,
+            toolbar: {
+                items: [
+                    {
+                        text: "添加",
+                        icon: "icon-plus",
+                        click: add
+                    },
+                    {
+                        text: "编辑",
+                        icon: "icon-edit",
+                        click: edit
+                    },
+                    {
+                        text:'管理幻灯片内容',
+                        icon: 'icon-picture',
+                        click: item_view
+                    },
+                    {
+                        text: "删除",
+                        icon: "icon-remove",
+                        click: del
+                    }
+                ]
+            }
+        });
+
+        form1 = $('#form1').ligerForm({
+            inputwidth: 200,
+            labelwidth: 80,
+            space: 10,
+            validate: true,
+            righttoken: "&nbsp;",
+            labelalign: "right",
+            align: "left",
+            fields: [
+                {
+                    id: "id", name: "id", newline: false, type: "hidden", display: "id"
+                }, {
+                    id:'name',
+                    name:'name',
+                    newline:true,
+                    type:'textbox',
+                    display:'幻灯片名称',
+                    aftercontent:'',
+                    width:200,
+                    validate:{required:true},
+                    editor: {
+                        width: 20
+                    }
+                },{
+                    id: "module_id",
+                    name: "module_id",
+                    newline: true,
+                    type: "combobox",
+                    display: "模块名称",
+                    aftercontent: "",
+                    width: 150,
+                    validate: {required: true},
+                    editor: {
+                        cancelable:false,
+                        width: 150,
+                        url:"{{url('slide/getModule')}}",
+                        onselected:select_module
+                    }
+                },{
+                    id: "action_id",
+                    name: "action_id",
+                    newline: true,
+                    type: "combobox",
+                    display: "动作名称",
+                    aftercontent: "",
+                    width: 150,
+                    validate: {required: true},
+                    editor: {
+                        cancelable:false,
+                        width: 150,
+                        url:"{{url('slide/getModuleAct')}}"
+                    }
+                },{
+                    id: "status",
+                    name: "status",
+                    newline: true,
+                    type: "combobox",
+                    display: "状态",
+                    aftercontent: "",
+                    width: 80,
+                    validate: {required: true},
+                    editor: {
+                        width: 150,
+                        initvalue:'no',
+                        cancelable: false,
+                        data:[{id:'regular',text:'正常'},{id:'singular',text:'禁用'}]
+                    }
+                }
+            ]
+        });
+
+        item_form = $('#item_form').ligerForm({
+            inputwidth: 400,
+            labelwidth: 80,
+            space: 10,
+            validate: true,
+            righttoken: "&nbsp;",
+            labelalign: "right",
+            align: "left",
+            fields: [
+                {
+                    id: "item_id", name: "id", newline: true, type: "hidden"
+                },
+                {
+                    id: "pid", name: "pid", newline: true, type: "hidden", display: "pid"
+                },
+                {
+                    id: "title",
+                    name: "title",
+                    newline: true,
+                    type: "textbox",
+                    display: "子项标题",
+                    width: 200,
+                    height: 30,
+                    aftercontent: '',
+                    validate: { required: true },
+                    editor: {width: 200}
+                }, {
+                    id: "image",
+                    name: "image",
+                    newline: true,
+                    type: "image",
+                    display: "幻灯片图片",
+                    aftercontent:"",
+                    width: 200,
+                    height: 50,
+                    validate: { required: true },
+                    editor: {
+                        preview:true,
+                        url:"{{url('Uploader/?action=uploadimage')}}",
+                        width: 200
+                    }
+                }, {
+                    id: "link",
+                    name: "link",
+                    newline: true,
+                    type: "textbox",
+                    display: "连接地址",
+                    aftercontent:"",
+                    width: 200,
+                    validate: { required: true },
+                    editor: {
+                        width: 200
+                    }
+                },
+                {
+                    id: "description",
+                    name: "description",
+                    newline: true,
+                    type: "textarea",
+                    display: "描述",
+                    aftercontent:"",
+                    width: 300,
+                    height:60,
+                    validate: { required: true },
+                    editor: {
+                        width: 300,
+                        height:60
+                    }
+                }
+            ]
+        });
+
+        item_datagrid = $('#item_datagrid').ligerGrid({
+            width: "100%",
+            height: "310",
+            columns: [{
+                display: "编号",
+                name: "id",
+                align: "center",
+                width: 40,
+                minwidth: 40,
+                frozen: true
+            }, {
+                display: "子项标题",
+                name: "title",
+                align: "center",
+                width: 250,
+                minwidth: 60
+            },{
+                display: "连接",
+                name: "link",
+                align: "center",
+                width: 150,
+                minwidth: 60
+            },{
+                display: "创建时间",
+                name: "create_time",
+                align: "center",
+                format:'Y-m-d H:i:s',
+                type:'date',
+                width: 150,
+                minwidth: 60
+            }],
+            frozen: true,
+            toolbar: {
+                items: [
+                    {
+                        text: "添加",
+                        icon: "icon-plus",
+                        click: add_item
+                    },
+                    {
+                        text: "编辑",
+                        icon: "icon-edit",
+                        click: edit_item
+                    },
+                    {
+                        text: "删除",
+                        icon: "icon-remove",
+                        click: del_item
+                    }
+
+                ]
+            }
+        });
+
+        item_win = $.ligerDialog({
+            width: 650,
+            height: 382,
+            target: $('#item_win'),
+            modal: true,
+            show: false,
+            title: "幻灯片子项管理",
+            slide: true
+        });
+        item_win.hide();
+
+        item_formwin = $.ligerDialog({
+            width: 600,
+            height: 400,
+            target: $('#item_formwin'),
+            modal: true,
+            show: false,
+            title: "编辑幻灯片子项",
+            slide: true,
+            buttons: [
+                {
+                    text: "确认提交",
+                    icon: "icon-edit",
+                    onclick: submititem
+                }
+            ]
+        });
+
+        item_formwin.hide();
+
+        win = $.ligerDialog({
+            width: 480,
+            height: 265,
+            target: $('#win'),
+            modal: true,
+            show: false,
+            title: "幻灯片管理",
+            slide: true,
+            buttons: [
+                {
+                    text: "确认提交",
+                    icon: "icon-edit",
+                    onclick: submitform
+                }
+            ]
+        });
+        win.hide();
+    });
+</script>

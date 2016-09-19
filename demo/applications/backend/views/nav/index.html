@@ -1,0 +1,542 @@
+<div class="container-fluid">
+    <div class="widget-box">
+        <div class="widget-title"><span class="icon"> <i class="icon-th"></i> </span>
+            <h5>{{title}}</h5>
+        </div>
+        <div class="widget-content">
+            <div id='datagrid'></div>
+            <div id='win'>
+                <form id='form1' action="" method="post"></form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    var datagrid;
+    var form1;
+    var form1_defaults = {id: '', name: '', pid: '0', module_id: '',action_id : '', title : '',keyword :'',description:'',display:'menu',display_submenu:'off',directory:'',param : '',tag:'',page:'',content:'',target:'no', sort: '0',require_login:'off',status:'regular'};
+    var win;
+
+    var module_list = {{module_list}};
+
+    var action_list = {{action_list}};
+
+    $.ligerDefaults.Grid.formatters['formatModule'] = function (data, column) {
+        var text = module_list[data] ? module_list[data] : data;
+        return text;
+    };
+
+    $.ligerDefaults.Grid.formatters['formatAction'] = function (data, column) {
+        var text = action_list[data] ? action_list[data] : data;
+        return text;
+    };
+
+    $.ligerDefaults.Grid.formatters['formatStatus'] = function (data, column) {
+        var list = {regular: '正常', singular: '禁用'};
+        var text = list[data] ? list[data] : data;
+        return text;
+    };
+
+
+    //添加操作
+    function add() {
+        form1.setData(form1_defaults);
+        $('#form1').attr('action', "{{url('nav/add')}}");
+        form1.getEditor('pid').getTree().set({parms:{pid:0}});
+        form1.getEditor('pid').getTree().reload();
+        win._setTitle('添加导航菜单信息');
+        win.show();
+    }
+
+    //编辑操作
+    function edit() {
+        var row = datagrid.getSelected();
+        if (!row) {
+            $.ligerDialog.error('请选择要编辑的导航菜单信息');
+            return false;
+        } else {
+            form1.getEditor('pid').setText(row.parent_name);
+            form1.getEditor('pid').getTree().set({parms:{pid:row.id}});
+            form1.getEditor('pid').getTree().reload();
+            form1.setData(row);
+        }
+        $('#form1').attr('action', "{{url('nav/edit')}}");
+        win._setTitle('编辑 [' + row.name + '] 导航菜单信息');
+        win.show();
+    }
+
+    //删除操作
+    function del() {
+        var row = datagrid.getSelected();
+        if (!row) {
+            $.ligerDialog.error('请选择要删除的导航菜单信息');
+            return false;
+        } else {
+            $.ligerDialog.confirm('确定要删除 [ ' + row.name + ' ] 导航菜单信息?', function (type) {
+                if (type) {
+                    $('#form1').ajaxForm("{{url('nav/delete')}}", {id: row.id}, function (response) {
+                        if (response.status == 0) {
+                            $.ligerDialog.error(response.message);
+                        } else {
+                            $.ligerDialog.success(response.message);
+                            datagrid.reload();
+                        }
+                    });
+                }
+            });
+        }
+    }
+
+
+    //提交表单
+    function submitform() {
+        if (form1.valid()) {
+            var form_data = form1.getData();
+            $.post($('#form1').attr('action'), form_data, function (response) {
+                if (response.status == 0) {
+                    $.ligerDialog.error(response.message);
+                } else {
+                    $.ligerDialog.success(response.message);
+                    datagrid.reload();
+                    win.hide();
+                }
+            });
+        } else {
+            $.ligerDialog.error("表单没有通过验证,请检查红色标记的表单项");
+        }
+    }
+
+    function select_module(value,text){
+        form1.getEditor('action_id').set({url:'{{url("nav/getModuleAct")}}',parms:{module_id:value}});
+    }
+
+    $(function () {
+        datagrid = $('#datagrid').ligerGrid({
+            width: "100%",
+            height: "100%",
+            url: "{{url('nav/index')}}",
+            columns: [
+            {
+                display: "编号",
+                name: "id",
+                align: "center",
+                width: 40,
+                minwidth: 40,
+                frozen: true
+            }, {
+                display: "导航名称",
+                name: "name",
+                id:'name',
+                align: "center",
+                width: 200,
+                minwidth: 60
+            }, {
+                display: "上级导航",
+                name: "parent_name",
+                align: "center",
+                width: 200,
+                minwidth: 60
+            }, {
+                display: "所属模块",
+                name: "module_id",
+                align: "center",
+                type: 'formatModule',
+                width: 150,
+                minwidth: 60
+            }, {
+                display: "所属动作",
+                name: "action_id",
+                align: "center",
+                width: 80,
+                type: 'formatAction'
+            } , {
+                display:'显示位置',
+                name:'display',
+                align:'center',
+                width:150,
+                render:function(rowdata,index,value){
+                    var data = {menu:'导航条',top:'顶部菜单',foot:'底部',all:'全部显示',none:'不显示'};
+                    return data[value] ? data[value] : '未知';
+                }
+            }, {
+                    display: "目录",
+                    name: "directory",
+                    align: "left",
+                    width: 200
+            }, {
+                    display: "参数",
+                    name: "param",
+                    align: "center",
+                    width: 120
+            }, {
+                    display: "调用代码",
+                    name: "tag",
+                    align: "center",
+                    width: 120
+            }, {
+                display: "排序",
+                name: "sort",
+                align: "center",
+                width: 60
+            }, {
+                    display: "是否需要登录",
+                    name: "require_login",
+                    align: "center",
+                    render:function(rowdata,index,value){
+                        var data = {on:'是',off:'否'};
+                        return data[value] ? data[value] : '未知';
+                    },
+                    width: 100
+            }, {
+                    display: "显示子菜单",
+                    name: "display_submenu",
+                    align: "center",
+                    render:function(rowdata,index,value){
+                        var data = {on:'是',off:'否'};
+                        return data[value] ? data[value] : '未知';
+                    },
+                    width: 100
+            }, {
+                display: "状态",
+                name: "status",
+                align: "center",
+                type:'formatStatus',
+                width: 80
+            }],
+            tree:{
+                columnid: 'name',
+                idfield: 'id',
+                parentidfield: 'pid'
+            },
+            usepager:false,
+            frozen: true,
+            toolbar: {
+                items: [
+                    {
+                        text: "添加",
+                        icon: "icon-plus",
+                        click: add
+                    },
+                    {
+                        text: "编辑",
+                        icon: "icon-edit",
+                        click: edit
+                    },
+                    {
+                        text: "删除",
+                        icon: "icon-remove",
+                        click: del
+                    }
+                ]
+            }
+        });
+
+        form1 = $('#form1').ligerForm({
+            inputwidth: 500,
+            labelwidth: 120,
+            space: 10,
+            validate: true,
+            righttoken: "&nbsp;",
+            labelalign: "right",
+            align: "left",
+            tab: {
+                items: [
+                    {
+                        title: '基本信息',
+                        fields: [
+                            {
+                                id: "id", name: "id", newline: false, type: "hidden", display: "id"
+                            },
+                            {
+                                id: "name",
+                                name: "name",
+                                newline: true,
+                                type: "textbox",
+                                display: "导航名称",
+                                width: 250,
+                                height: 30,
+                                aftercontent: '',
+                                validate: {required: true},
+                                editor: {width: 250}
+                            }, {
+                                id: "pid",
+                                name: "pid",
+                                newline: true,
+                                type: "combobox",
+                                display: "上级导航",
+                                aftercontent: "",
+                                width: 250,
+                                validate: {required: false},
+                                editor: {
+                                    width: 250,
+                                    selectboxwidth:247,
+                                    selectboxheight:280,
+                                    treeleafonly:false,
+                                    valuefield: 'id',
+                                    textfieldname:'text',
+                                    tree:{
+                                        isleaf:false,
+                                        checkbox:false,
+                                        single:true,
+                                        url: '{{url("nav/getTree")}}',
+                                        idfield: 'id',
+                                        parentidfield: 'pid',
+                                        parms:{pid:0}
+                                    }
+                                }
+                            }, {
+                                id: "display",
+                                name: "display",
+                                newline: true,
+                                type: "combobox",
+                                display: "导航显示位置",
+                                aftercontent: "",
+                                width: 150,
+                                validate: {required: true},
+                                editor: {
+                                    width: 150,
+                                    initvalue:'menu',
+                                    cancelable: false,
+                                    data:[{id:'menu',text:'导航条'},{id:'top',text:'顶部菜单'},{id:'foot',text:'底部'},{id:'all',text:'全部显示'},{id:'none',text:'不显示'}]
+                                }
+                            }, {
+                                id: "display_submenu",
+                                name: "display_submenu",
+                                newline: true,
+                                type: "combobox",
+                                display: "显示子菜单",
+                                aftercontent: "",
+                                width: 150,
+                                validate: {required: true},
+                                editor: {
+                                    width: 150,
+                                    initvalue:'off',
+                                    cancelable: false,
+                                    data:[{id:'on',text:'是'},{id:'off',text:'否'}]
+                                }
+                            },
+                            {
+                                id: "module_id",
+                                name: "module_id",
+                                newline: true,
+                                type: "combobox",
+                                display: "所属模块",
+                                width: 150,
+                                height: 30,
+                                validate: {required: true},
+                                editor: {
+                                    url: '{{url("nav/getModule")}}',
+                                    cancelable: false,
+                                    onselected:select_module
+                                }
+                            }, {
+                                id: "action_id",
+                                name: "action_id",
+                                newline: true,
+                                type: "combobox",
+                                display: "所属动作",
+                                width: 150,
+                                height: 30,
+                                validate: {required: true},
+                                editor: {
+                                    width: 150,
+                                    cancelable: false
+                                }
+                            },{
+                                id: "param",
+                                name: "param",
+                                newline: true,
+                                type: "textbox",
+                                display: "附加请求参数",
+                                width: 250,
+                                height: 30,
+                                aftercontent: '例:type=1&id=3',
+                                validate: {required: false},
+                                editor: {width: 250}
+                            },{
+                                id: "tag",
+                                name: "tag",
+                                newline: true,
+                                type: "textbox",
+                                display: "调用代码",
+                                width: 250,
+                                height: 30,
+                                aftercontent: '',
+                                validate: {required: false},
+                                editor: {width: 250}
+                            },{
+                                id: "require_login",
+                                name: "require_login",
+                                newline: true,
+                                type: "combobox",
+                                display: "是否需要登录",
+                                aftercontent: "",
+                                width: 80,
+                                validate: {required: true},
+                                editor: {
+                                    width: 80,
+                                    initalue:'no',
+                                    cancelable: false,
+                                    data:[{id:'off',text:'否'},{id:'on',text:'是'}]
+                                }
+                            },{
+                                id: "target",
+                                name: "target",
+                                newline: true,
+                                type: "combobox",
+                                display: "新窗口打开",
+                                aftercontent: "",
+                                width: 80,
+                                validate: {required: true},
+                                editor: {
+                                    width: 80,
+                                    initalue:'no',
+                                    cancelable: false,
+                                    data:[{id:'no',text:'否'},{id:'yes',text:'是'}]
+                                }
+                            }, {
+                                id: "sort",
+                                name: "sort",
+                                newline: true,
+                                type: "integer",
+                                display: "排序",
+                                width: 80,
+                                validate: {required: true},
+                                editor: {
+                                    width: 80
+                                }
+                            },{
+                                id: "status",
+                                name: "status",
+                                newline: true,
+                                type: "combobox",
+                                display: "状态",
+                                aftercontent: "",
+                                width: 80,
+                                validate: {required: true},
+                                editor: {
+                                    width: 150,
+                                    initvalue:'no',
+                                    cancelable: false,
+                                    data:[{id:'regular',text:'正常'},{id:'singular',text:'禁用'}]
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        title: '优化设置',
+                        fields: [
+                            {
+                                id: "title",
+                                name: "title",
+                                newline: true,
+                                type: "textbox",
+                                display: "网页标题",
+                                width: 250,
+                                height: 30,
+                                aftercontent: '仅适用简介模块的导航',
+                                validate: {required: false},
+                                editor: {width: 250}
+                            },
+                            {
+                                id: "keyword",
+                                name: "keyword",
+                                newline: true,
+                                type: "textarea",
+                                display: "关键字",
+                                width: 300,
+                                height: 80,
+                                aftercontent: '仅适用简介模块的导航',
+                                validate: {required: false},
+                                editor: {
+                                    width: 300,
+                                    height:80
+                                }
+                            },
+                            {
+                                id: "description",
+                                name: "description",
+                                newline: true,
+                                type: "textarea",
+                                display: "简短描述",
+                                width: 300,
+                                height: 80,
+                                aftercontent: '仅适用简介模块的导航',
+                                validate: {required: false},
+                                editor: {
+                                    width: 300,
+                                    height:80
+                                }
+                            },{
+                                id: "directory",
+                                name: "directory",
+                                newline: true,
+                                type: "textbox",
+                                display: "指定目录",
+                                width: 250,
+                                height: 30,
+                                aftercontent: '例:/example/',
+                                validate: {required: true},
+                                editor: {width: 250}
+                            },{
+                                id: "page",
+                                name: "page",
+                                newline: true,
+                                type: "combobox",
+                                display: "视图页面文件",
+                                width: 250,
+                                height: 30,
+                                aftercontent: '仅适用简介模块的导航',
+                                validate: {required: false},
+                                editor: {
+                                    width: 250,
+                                    url:'{{url("nav/getPageList")}}'
+                                }
+                            }
+                        ]
+                    }, {
+                        title: '页面内容',
+                        fields: [
+                            {
+                                id: "content",
+                                name: "content",
+                                newline: true,
+                                type: "editor",
+                                display: "内容",
+                                hidespace:true,
+                                hidelabel:true,
+                                width: 630,
+                                height: 310,
+                                aftercontent: '',
+                                validate: {required: false},
+                                editor: {
+                                    width: 630,height:300
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        });
+
+        win = $.ligerDialog({
+            width: 720,
+            height: 670,
+            target: $('#win'),
+            modal: true,
+            show: false,
+            title: "编辑导航菜单信息",
+            slide: true,
+            buttons: [
+                {
+                    text: "确认提交",
+                    icon: "icon-edit",
+                    onclick: submitform
+                }
+            ]
+        });
+        win.hide();
+    });
+</script>

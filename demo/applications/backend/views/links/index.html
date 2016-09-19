@@ -1,0 +1,305 @@
+<div class="container-fluid">
+    <div class="widget-box">
+        <div class="widget-title"><span class="icon"> <i class="icon-th"></i> </span>
+            <h5>{{title}}</h5>
+        </div>
+        <div class="widget-content">
+            <div id='datagrid'></div>
+            <div id='win'>
+                <form id='form1' action="" method="post"></form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    var datagrid;
+    var form1;
+    var form1_defaults = {title:'',type:'text',url:'',logo:'',sort:'0',recommend:'0',status:'pending'};
+    var win;
+
+    $.ligerDefaults.Grid.formatters['formatStatus'] = function (data, column) {
+        var list = {pending: '待审核', on: '正常',off:'禁用'};
+        return list[data] ? list[data] : data;
+    };
+
+
+    //添加操作
+    function add() {
+        form1.setData(form1_defaults);
+        $('#form1').attr('action', "{{url('Links/add')}}");
+        win._setTitle('添加友情连接');
+        win.show();
+    }
+
+
+    //编辑操作
+    function edit() {
+        var row = datagrid.getSelected();
+        if (!row) {
+            $.ligerDialog.error('请选择要编辑的友情连接');
+            return false;
+        } else {
+            form1.setData(row);
+        }
+        $('#form1').attr('action', "{{url('Links/edit')}}");
+        win._setTitle('编辑 [' + row.title + '] 友情连接');
+        win.show();
+    }
+
+    //删除操作
+    function del() {
+        var row = datagrid.getSelected();
+        if (!row) {
+            $.ligerDialog.error('请选择要删除的友情连接');
+            return false;
+        } else {
+            $.ligerDialog.confirm('确定要删除 [ ' + row.title + ' ] 友情连接?', function (type) {
+                if (type) {
+                    $('#form1').ajaxForm("{{url('Links/delete')}}", {id: row.id}, function (response) {
+                        if (response.status == 0) {
+                            $.ligerDialog.error(response.message);
+                        } else {
+                            $.ligerDialog.success(response.message);
+                            datagrid.reload();
+                        }
+                    });
+                }
+            });
+        }
+    }
+
+
+
+    //提交表单
+    function submitform() {
+        if (form1.valid()) {
+            var form_data = form1.getData();
+            $.post($('#form1').attr('action'), form_data, function (response) {
+                if (response.status == 0) {
+                    $.ligerDialog.error(response.message);
+                } else {
+                    $.ligerDialog.success(response.message);
+                    datagrid.reload();
+                    win.hide();
+                }
+            });
+        } else {
+            $.ligerDialog.error("表单没有通过验证,请检查红色标记的表单项");
+        }
+    }
+
+    $(function () {
+        datagrid = $('#datagrid').ligerGrid({
+            width: "100%",
+            height: "100%",
+            url: "{{url('Links/index')}}",
+            columns: [{
+                display: "编号",
+                name: "id",
+                align: "center",
+                width: 40,
+                minwidth: 40,
+                frozen: true
+            }, {
+                display: "网站名称",
+                name: "title",
+                align: "center",
+                width: 150,
+                minwidth: 60
+            }, {
+                display: "类型",
+                name: "type",
+                align: "center",
+                width: 150,
+                minwidth: 60,
+                render:function(rowdata,index,value){
+                    var data = {text:'文字连接',logo:'图片连接'};
+                    return data[value] ? data[value] : '未知';
+                }
+            }, {
+                display: "网址",
+                name: "url",
+                align: "center",
+                width: 200,
+                minwidth: 60
+            }, {
+                display: "LOGO",
+                name: "logo",
+                align: "center",
+                width: 120,
+                render:function(rowdata,index,value){
+                    if(value != ''){
+                        return '<img border=0 src="'+value+'">';
+                    }else{
+                        return '';
+                    }
+                }
+            },{
+                display: "推荐状态",
+                name: "recommend",
+                align: "center",
+                render:function(rowdata,index,value){
+                    var data = {0:'否',1:'是'};
+                    return data[value] ? data[value] : '未知';
+                },
+                width: 80
+            }, {
+                display: "状态",
+                name: "status",
+                align: "center",
+                type:'formatStatus',
+                width: 80
+            }],
+            frozen: true,
+            rowheight:50,
+            toolbar: {
+                items: [
+                    {
+                        text: "添加",
+                        icon: "icon-plus",
+                        click: add
+                    },
+                    {
+                        text: "编辑",
+                        icon: "icon-edit",
+                        click: edit
+                    },
+                    {
+                        text: "删除",
+                        icon: "icon-remove",
+                        click: del
+                    }
+                ]
+            }
+        });
+
+        form1 = $('#form1').ligerForm({
+            inputwidth: 200,
+            labelwidth: 80,
+            space: 10,
+            validate: true,
+            righttoken: "&nbsp;",
+            labelalign: "right",
+            align: "left",
+            fields: [
+                {
+                    id: "id", name: "id", newline: false, type: "hidden", display: "id"
+                }, {
+                    id:'title',
+                    name:'title',
+                    newline:true,
+                    type:'textbox',
+                    display:'网站标题',
+                    aftercontent:'',
+                    width:200,
+                    validate:{required:true},
+                    editor: {
+                        width: 200
+                    }
+                },{
+                    id:'type',
+                    name:'type',
+                    newline:true,
+                    type:'combobox',
+                    display:'连接类型',
+                    aftercontent:'',
+                    width:100,
+                    validate:{required:true},
+                    editor: {
+                        width: 100,
+                        cancelable: false,
+                        data:[{id:'text',text:'文本连接'},{id:'logo',text:'图片连接'}]
+                    }
+                }, {
+                    id: "url",
+                    name: "url",
+                    newline: true,
+                    type: "textbox",
+                    display: "连接地址",
+                    width: 200,
+                    height: 30,
+                    validate: {required: true},
+                    editor: {
+                        width: 200
+                    }
+                },{
+                    id: "logo",
+                    name: "logo",
+                    newline: true,
+                    type: "file",
+                    display: "网站LOGO",
+                    aftercontent:"",
+                    width: 250,
+                    height: 50,
+                    validate: { required: true },
+                    editor: {
+                        url:"{{url('Uploader/?action=uploadfile&handle=thumb&width=144&height=40')}}",
+                        width: 250
+                    }
+                },{
+                    id: "sort",
+                    name: "sort",
+                    newline: true,
+                    type: "integer",
+                    display: "排序",
+                    aftercontent: "",
+                    width: 60,
+                    validate: {required: true},
+                    editor: {
+                        width: 60
+                    }
+                },{
+                    id: "recommend",
+                    name: "recommend",
+                    newline: true,
+                    type: "combobox",
+                    display: "是否推荐",
+                    aftercontent: "",
+                    width: 80,
+                    validate: {required: true},
+                    editor: {
+                        width: 80,
+                        initvalue:'0',
+                        cancelable: false,
+                        data:[{id:'0',text:'否'},{id:'1',text:'是'}]
+                    }
+                },{
+                    id: "status",
+                    name: "status",
+                    newline: true,
+                    type: "combobox",
+                    display: "状态",
+                    aftercontent: "",
+                    width: 80,
+                    validate: {required: true},
+                    editor: {
+                        width: 150,
+                        initvalue:'pending',
+                        cancelable: false,
+                        data:[{id:'pending',text:'待审核'},{id:'on',text:'正常'},{id:'off',text:'禁用'}]
+                    }
+                }
+            ]
+        });
+
+        win = $.ligerDialog({
+            width: 500,
+            height: 420,
+            target: $('#win'),
+            modal: true,
+            show: false,
+            title: "友情链接管理",
+            slide: true,
+            buttons: [
+                {
+                    text: "确认提交",
+                    icon: "icon-edit",
+                    onclick: submitform
+                }
+            ]
+        });
+        win.hide();
+    });
+</script>

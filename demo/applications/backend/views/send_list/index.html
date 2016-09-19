@@ -1,0 +1,198 @@
+<div class="container-fluid">
+    <div class="widget-box">
+        <div class="widget-title"><span class="icon"> <i class="icon-th"></i> </span>
+            <h5>{{title}}</h5>
+        </div>
+        <div class="widget-content">
+            <div id='datagrid'></div>
+            <div id='win'>
+                <form id='form1' action="" method="post"></form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    var datagrid;
+    var form1;
+    var form1_defaults = {title:'',type:'notice',content:'',hits:'0',link:'',keyword:'',description:'',status:'on'};
+    var win;
+    var view_dialog;
+
+    $.ligerDefaults.Grid.formatters['formatStatus'] = function (data, column) {
+        var list = {pending:'待发送',regular:'已发送',singular:'发送错误'};
+        return list[data] ? list[data] : data;
+    };
+
+    function view_content(index){
+        var row_data = datagrid.getRow(index);
+        view_dialog.set({content:'<div class="widget-box" style="overflow-y:scroll;">发送内容:<br/><div class="alert alert-info alert-block"><pre class="prettyprint">'  + row_data['content'] + '</pre></div>错误信息:<br/><div class="alert alert-error alert-block"><pre class="prettyprint">' + row_data['errorinfo'] +  '</pre></div></div>'});
+        view_dialog.show();
+    }
+
+
+
+    //编辑操作
+    function send() {
+        var rows = datagrid.getSelecteds();
+        if (!rows || rows.length == 0) {
+            $.ligerDialog.error('请选择要发送的队列');
+            return false;
+        } else {
+            var ids = [];
+            for(var i in rows){
+                ids.push(rows[i].id);
+            }
+            var manager = $.ligerDialog.waitting('正在发送,请稍后...');
+            $.post('{{url("SendList/send")}}',{ids:ids},function(result){
+                manager.close();
+                datagrid.reload();
+            });
+        }
+    }
+
+    //删除操作
+    function del() {
+        var rows = datagrid.getSelecteds();
+        if (!rows || rows.length == 0) {
+            $.ligerDialog.error('请选择要删除的队列');
+            return false;
+        } else {
+            var ids = [];
+            for(var i in rows){
+                ids.push(rows[i].id);
+            }
+            $.ligerDialog.confirm('确定要删除选择队列?', function (type) {
+                if (type) {
+                    $('#form1').ajaxForm("{{url('SendList/delete')}}", {ids: ids}, function (response) {
+                        if (response.status == 0) {
+                            $.ligerDialog.error(response.message);
+                        } else {
+                            $.ligerDialog.success(response.message);
+                            datagrid.reload();
+                        }
+                    });
+                }
+            });
+        }
+    }
+
+    //清空操作
+    function flush(){
+        $.ligerDialog.confirm('确定要清空全部队列?', function (type) {
+            if (type) {
+                $('#form1').ajaxForm("{{url('SendList/flush')}}", {}, function (response) {
+                    if (response.status == 0) {
+                        $.ligerDialog.error(response.message);
+                    } else {
+                        $.ligerDialog.success(response.message);
+                        datagrid.reload();
+                    }
+                });
+            }
+        });
+    }
+
+    $(function () {
+        view_dialog = $.ligerDialog({title:'查看发送内容',width:580,height:400,contentCls:'log-content'});
+        view_dialog.hide();
+        datagrid = $('#datagrid').ligerGrid({
+            width: "100%",
+            height: "100%",
+            url: "{{url('SendList/index')}}",
+            whenrclicktoselect:true,
+            checkbox: true,
+            rownumbers:true,
+            columns: [{
+                display: "编号",
+                name: "id",
+                align: "center",
+                width: 40,
+                frozen: true
+            }, {
+                display: "类型",
+                name: "type",
+                align: "center",
+                width: 80,
+                render:function(rowdata,index,value){
+                    var data = {email:'邮件',sms:'短信'};
+                    return data[value] ? data[value] : '未知';
+                }
+            }, {
+                display: "模板名称",
+                name: "template_name",
+                align: "center",
+                width: 120
+            }, {
+                display: "接口名称",
+                name: "server_name",
+                align: "center",
+                width: 200
+            }, {
+                display: "接收者",
+                name: "sendto",
+                align: "center",
+                width: 150
+            },{
+                display: '标题',
+                name:'title',
+                align:'center',
+                width:150
+            },{
+                display: '用户',
+                name:'username',
+                align:'center',
+                width:150
+            },{
+                display: "创建时间",
+                name: "addtime",
+                align: "center",
+                type:'date',
+                format:'Y-m-d H:i',
+                width: 150
+            },{
+                display: "发送时间",
+                name: "sendtime",
+                align: "center",
+                type:'date',
+                format:'Y-m-d H:i',
+                width: 150
+            }, {
+                display: "状态",
+                name: "status",
+                align: "center",
+                type:'formatStatus',
+                width: 80
+            },{
+                display:"操作",
+                name:"id",
+                align:"center",
+                width: 120,
+                render:function(rowdata,index,value){
+                    return "<span onclick='view_content("+index+")' class='btn btn-success icon icon-eye-open' style='margin-bottom: 3px;padding-top: 1px;'>查看内容</span>";
+                }
+            }],
+            frozen: true,
+            toolbar: {
+                items: [
+                    {
+                        text: "发送选中",
+                        icon: "gi gi-send",
+                        click: send
+                    },
+                    {
+                        text: "清空队列",
+                        icon: "gi gi-cleaning",
+                        click: flush
+                    },
+                    {
+                        text: "删除选中",
+                        icon: "gi gi-delete",
+                        click: del
+                    }
+                ]
+            }
+        });
+    });
+</script>

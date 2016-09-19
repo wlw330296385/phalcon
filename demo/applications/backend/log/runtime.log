@@ -1,0 +1,949 @@
+2016-09-05 22:08:54||DEBUG||
+file:D:\website\qiketianxia\applications\common\config\service.php
+line:170
+code:1045
+message:SQLSTATE[HY000] [1045] Access denied for user 'qktx'@'localhost' (using password: YES)
+trace:#0 [internal function]: PDO->__construct('mysql:host=loca...', 'qktx', '123456', Array)
+#1 [internal function]: Phalcon\Db\Adapter\Pdo->connect(Array)
+#2 D:\website\qiketianxia\applications\common\config\service.php(170): Phalcon\Db\Adapter\Pdo->__construct(Array)
+#3 [internal function]: {closure}()
+#4 [internal function]: Phalcon\Di\Service->resolve(NULL, Object(Phalcon\Di))
+#5 D:\website\qiketianxia\applications\common\library\Model.php(108): Phalcon\Di->get('db')
+#6 D:\website\qiketianxia\applications\backend\library\ControllerBase.php(226): Oupula\Library\Model->__construct()
+#7 D:\website\qiketianxia\applications\backend\library\ControllerBase.php(123): Oupula\Backend\Library\ControllerBase->getSettings()
+#8 [internal function]: Oupula\Backend\Library\ControllerBase->OnConstruct()
+#9 [internal function]: Phalcon\Mvc\Controller->__construct()
+#10 [internal function]: Phalcon\Di->get('Oupula\\Backend\\...', NULL)
+#11 [internal function]: Phalcon\Di->getShared('Oupula\\Backend\\...')
+#12 [internal function]: Phalcon\Dispatcher->dispatch()
+#13 D:\website\qiketianxia\backend\index.php(30): Phalcon\Mvc\Application->handle()
+#14 {main}
+
+2016-09-05 22:08:54||DEBUG||
+file:D:\website\qiketianxia\applications\common\config\service.php
+line:170
+code:1045
+message:SQLSTATE[HY000] [1045] Access denied for user 'qktx'@'localhost' (using password: YES)
+trace:#0 [internal function]: PDO->__construct('mysql:host=loca...', 'qktx', '123456', Array)
+#1 [internal function]: Phalcon\Db\Adapter\Pdo->connect(Array)
+#2 D:\website\qiketianxia\applications\common\config\service.php(170): Phalcon\Db\Adapter\Pdo->__construct(Array)
+#3 [internal function]: {closure}()
+#4 [internal function]: Phalcon\Di\Service->resolve(NULL, Object(Phalcon\Di))
+#5 D:\website\qiketianxia\applications\common\library\Model.php(108): Phalcon\Di->get('db')
+#6 D:\website\qiketianxia\applications\backend\library\ControllerBase.php(226): Oupula\Library\Model->__construct()
+#7 D:\website\qiketianxia\applications\backend\library\ControllerBase.php(123): Oupula\Backend\Library\ControllerBase->getSettings()
+#8 [internal function]: Oupula\Backend\Library\ControllerBase->OnConstruct()
+#9 [internal function]: Phalcon\Mvc\Controller->__construct()
+#10 [internal function]: Phalcon\Di->get('Oupula\\Backend\\...', NULL)
+#11 [internal function]: Phalcon\Di->getShared('Oupula\\Backend\\...')
+#12 [internal function]: Phalcon\Dispatcher->dispatch()
+#13 D:\website\qiketianxia\backend\index.php(30): Phalcon\Mvc\Application->handle()
+#14 {main}
+
+2016-09-05 22:10:52||DEBUG||
+file:D:\website\qiketianxia\applications\common\config\service.php
+line:170
+code:1045
+message:SQLSTATE[HY000] [1045] Access denied for user 'qktx'@'localhost' (using password: YES)
+trace:#0 [internal function]: PDO->__construct('mysql:host=loca...', 'qktx', '123456', Array)
+#1 [internal function]: Phalcon\Db\Adapter\Pdo->connect(Array)
+#2 D:\website\qiketianxia\applications\common\config\service.php(170): Phalcon\Db\Adapter\Pdo->__construct(Array)
+#3 [internal function]: {closure}()
+#4 [internal function]: Phalcon\Di\Service->resolve(NULL, Object(Phalcon\Di))
+#5 D:\website\qiketianxia\applications\common\library\Model.php(108): Phalcon\Di->get('db')
+#6 D:\website\qiketianxia\applications\backend\library\ControllerBase.php(226): Oupula\Library\Model->__construct()
+#7 D:\website\qiketianxia\applications\backend\library\ControllerBase.php(123): Oupula\Backend\Library\ControllerBase->getSettings()
+#8 [internal function]: Oupula\Backend\Library\ControllerBase->OnConstruct()
+#9 [internal function]: Phalcon\Mvc\Controller->__construct()
+#10 [internal function]: Phalcon\Di->get('Oupula\\Backend\\...', NULL)
+#11 [internal function]: Phalcon\Di->getShared('Oupula\\Backend\\...')
+#12 [internal function]: Phalcon\Dispatcher->dispatch()
+#13 D:\website\qiketianxia\backend\index.php(30): Phalcon\Mvc\Application->handle()
+#14 {main}
+
+2016-09-05 22:10:52||DEBUG||
+file:D:\website\qiketianxia\applications\common\config\service.php
+line:170
+code:1045
+message:SQLSTATE[HY000] [1045] Access denied for user 'qktx'@'localhost' (using password: YES)
+trace:#0 [internal function]: PDO->__construct('mysql:host=loca...', 'qktx', '123456', Array)
+#1 [internal function]: Phalcon\Db\Adapter\Pdo->connect(Array)
+#2 D:\website\qiketianxia\applications\common\config\service.php(170): Phalcon\Db\Adapter\Pdo->__construct(Array)
+#3 [internal function]: {closure}()
+#4 [internal function]: Phalcon\Di\Service->resolve(NULL, Object(Phalcon\Di))
+#5 D:\website\qiketianxia\applications\common\library\Model.php(108): Phalcon\Di->get('db')
+#6 D:\website\qiketianxia\applications\backend\library\ControllerBase.php(226): Oupula\Library\Model->__construct()
+#7 D:\website\qiketianxia\applications\backend\library\ControllerBase.php(123): Oupula\Backend\Library\ControllerBase->getSettings()
+#8 [internal function]: Oupula\Backend\Library\ControllerBase->OnConstruct()
+#9 [internal function]: Phalcon\Mvc\Controller->__construct()
+#10 [internal function]: Phalcon\Di->get('Oupula\\Backend\\...', NULL)
+#11 [internal function]: Phalcon\Di->getShared('Oupula\\Backend\\...')
+#12 [internal function]: Phalcon\Dispatcher->dispatch()
+#13 D:\website\qiketianxia\backend\index.php(30): Phalcon\Mvc\Application->handle()
+#14 {main}
+
+2016-09-06 02:10:54||DEBUG||
+file:D:\website\qiketianxia\backend\index.php
+line:30
+code:2
+message:Oupula\Backend\Controllers\WebController handler class cannot be loaded
+trace:#0 [internal function]: Phalcon\Mvc\Dispatcher->_throwDispatchException('Oupula\\Backend\\...', 2)
+#1 [internal function]: Phalcon\Dispatcher->dispatch()
+#2 D:\website\qiketianxia\backend\index.php(30): Phalcon\Mvc\Application->handle()
+#3 {main}
+
+2016-09-06 04:13:29||DEBUG||
+file:D:\website\qiketianxia\backend\index.php
+line:30
+code:0
+message:Syntax error, unexpected token > in D:\website\qiketianxia\backend/../applications/backend/views/index/index.html on line 37
+trace:#0 [internal function]: Phalcon\Mvc\View\Engine\Volt\Compiler->_compileSource('...', false)
+#1 [internal function]: Phalcon\Mvc\View\Engine\Volt\Compiler->compileFile('D:\\website\\qike...', 'D:\\website\\qike...', false)
+#2 [internal function]: Phalcon\Mvc\View\Engine\Volt\Compiler->compile('D:\\website\\qike...')
+#3 [internal function]: Phalcon\Mvc\View\Engine\Volt->render('D:\\website\\qike...', Array, true)
+#4 [internal function]: Phalcon\Mvc\View->_engineRender(Array, 'index/index', true, true, NULL)
+#5 [internal function]: Phalcon\Mvc\View->render('index', 'index', Array)
+#6 D:\website\qiketianxia\backend\index.php(30): Phalcon\Mvc\Application->handle()
+#7 {main}
+
+2016-09-06 04:13:29||DEBUG||
+file:D:\website\qiketianxia\backend\index.php
+line:30
+code:0
+message:Syntax error, unexpected token > in D:\website\qiketianxia\backend/../applications/backend/views/index/index.html on line 37
+trace:#0 [internal function]: Phalcon\Mvc\View\Engine\Volt\Compiler->_compileSource('...', false)
+#1 [internal function]: Phalcon\Mvc\View\Engine\Volt\Compiler->compileFile('D:\\website\\qike...', 'D:\\website\\qike...', false)
+#2 [internal function]: Phalcon\Mvc\View\Engine\Volt\Compiler->compile('D:\\website\\qike...')
+#3 [internal function]: Phalcon\Mvc\View\Engine\Volt->render('D:\\website\\qike...', Array, true)
+#4 [internal function]: Phalcon\Mvc\View->_engineRender(Array, 'index/index', true, true, NULL)
+#5 [internal function]: Phalcon\Mvc\View->render('index', 'index', Array)
+#6 D:\website\qiketianxia\backend\index.php(30): Phalcon\Mvc\Application->handle()
+#7 {main}
+
+2016-09-08 11:31:45||DEBUG||
+file:D:\phpStudy\WWW\demo\applications\backend\library\ControllerBase.php
+line:59
+code:0
+message:Could not connect to the Redisd server 127.0.0.1:6379
+trace:#0 [internal function]: Phalcon\Cache\Backend\Redis->_connect()
+#1 D:\phpStudy\WWW\demo\applications\backend\library\ControllerBase.php(59): Phalcon\Cache\Backend\Redis->get('settings')
+#2 D:\phpStudy\WWW\demo\applications\backend\library\ControllerBase.php(50): Oupula\Backend\Library\ControllerBase->getSettings()
+#3 [internal function]: Oupula\Backend\Library\ControllerBase->OnConstruct()
+#4 [internal function]: Phalcon\Mvc\Controller->__construct()
+#5 [internal function]: Phalcon\Di->get('Oupula\\Backend\\...', NULL)
+#6 [internal function]: Phalcon\Di->getShared('Oupula\\Backend\\...')
+#7 [internal function]: Phalcon\Dispatcher->_dispatch()
+#8 [internal function]: Phalcon\Dispatcher->dispatch()
+#9 D:\phpStudy\WWW\demo\backend\index.php(30): Phalcon\Mvc\Application->handle()
+#10 {main}
+
+2016-09-08 11:31:48||DEBUG||
+file:D:\phpStudy\WWW\demo\applications\backend\library\ControllerBase.php
+line:59
+code:0
+message:Could not connect to the Redisd server 127.0.0.1:6379
+trace:#0 [internal function]: Phalcon\Cache\Backend\Redis->_connect()
+#1 D:\phpStudy\WWW\demo\applications\backend\library\ControllerBase.php(59): Phalcon\Cache\Backend\Redis->get('settings')
+#2 D:\phpStudy\WWW\demo\applications\backend\library\ControllerBase.php(50): Oupula\Backend\Library\ControllerBase->getSettings()
+#3 [internal function]: Oupula\Backend\Library\ControllerBase->OnConstruct()
+#4 [internal function]: Phalcon\Mvc\Controller->__construct()
+#5 [internal function]: Phalcon\Di->get('Oupula\\Backend\\...', NULL)
+#6 [internal function]: Phalcon\Di->getShared('Oupula\\Backend\\...')
+#7 [internal function]: Phalcon\Dispatcher->_dispatch()
+#8 [internal function]: Phalcon\Dispatcher->dispatch()
+#9 D:\phpStudy\WWW\demo\backend\index.php(30): Phalcon\Mvc\Application->handle()
+#10 {main}
+
+2016-09-08 11:35:06||DEBUG||
+file:D:\phpStudy\WWW\demo\applications\common\config\service.php
+line:170
+code:1045
+message:SQLSTATE[HY000] [1045] Access denied for user 'rot'@'localhost' (using password: YES)
+trace:#0 [internal function]: PDO->__construct('mysql:host=loca...', 'rot', 'root', Array)
+#1 [internal function]: Phalcon\Db\Adapter\Pdo->connect(Array)
+#2 D:\phpStudy\WWW\demo\applications\common\config\service.php(170): Phalcon\Db\Adapter\Pdo->__construct(Array)
+#3 [internal function]: Closure->{closure}()
+#4 [internal function]: Phalcon\Di\Service->resolve(NULL, Object(Phalcon\Di))
+#5 D:\phpStudy\WWW\demo\applications\common\library\Model.php(108): Phalcon\Di->get('db')
+#6 D:\phpStudy\WWW\demo\applications\backend\library\ControllerBase.php(61): Oupula\Library\Model->__construct()
+#7 D:\phpStudy\WWW\demo\applications\backend\library\ControllerBase.php(50): Oupula\Backend\Library\ControllerBase->getSettings()
+#8 [internal function]: Oupula\Backend\Library\ControllerBase->OnConstruct()
+#9 [internal function]: Phalcon\Mvc\Controller->__construct()
+#10 [internal function]: Phalcon\Di->get('Oupula\\Backend\\...', NULL)
+#11 [internal function]: Phalcon\Di->getShared('Oupula\\Backend\\...')
+#12 [internal function]: Phalcon\Dispatcher->_dispatch()
+#13 [internal function]: Phalcon\Dispatcher->dispatch()
+#14 D:\phpStudy\WWW\demo\backend\index.php(30): Phalcon\Mvc\Application->handle()
+#15 {main}
+
+2016-09-08 11:35:07||DEBUG||
+file:D:\phpStudy\WWW\demo\applications\common\config\service.php
+line:170
+code:1045
+message:SQLSTATE[HY000] [1045] Access denied for user 'rot'@'localhost' (using password: YES)
+trace:#0 [internal function]: PDO->__construct('mysql:host=loca...', 'rot', 'root', Array)
+#1 [internal function]: Phalcon\Db\Adapter\Pdo->connect(Array)
+#2 D:\phpStudy\WWW\demo\applications\common\config\service.php(170): Phalcon\Db\Adapter\Pdo->__construct(Array)
+#3 [internal function]: Closure->{closure}()
+#4 [internal function]: Phalcon\Di\Service->resolve(NULL, Object(Phalcon\Di))
+#5 D:\phpStudy\WWW\demo\applications\common\library\Model.php(108): Phalcon\Di->get('db')
+#6 D:\phpStudy\WWW\demo\applications\backend\library\ControllerBase.php(61): Oupula\Library\Model->__construct()
+#7 D:\phpStudy\WWW\demo\applications\backend\library\ControllerBase.php(50): Oupula\Backend\Library\ControllerBase->getSettings()
+#8 [internal function]: Oupula\Backend\Library\ControllerBase->OnConstruct()
+#9 [internal function]: Phalcon\Mvc\Controller->__construct()
+#10 [internal function]: Phalcon\Di->get('Oupula\\Backend\\...', NULL)
+#11 [internal function]: Phalcon\Di->getShared('Oupula\\Backend\\...')
+#12 [internal function]: Phalcon\Dispatcher->_dispatch()
+#13 [internal function]: Phalcon\Dispatcher->dispatch()
+#14 D:\phpStudy\WWW\demo\backend\index.php(30): Phalcon\Mvc\Application->handle()
+#15 {main}
+
+2016-09-08 11:35:08||DEBUG||
+file:D:\phpStudy\WWW\demo\applications\common\config\service.php
+line:170
+code:1045
+message:SQLSTATE[HY000] [1045] Access denied for user 'rot'@'localhost' (using password: YES)
+trace:#0 [internal function]: PDO->__construct('mysql:host=loca...', 'rot', 'root', Array)
+#1 [internal function]: Phalcon\Db\Adapter\Pdo->connect(Array)
+#2 D:\phpStudy\WWW\demo\applications\common\config\service.php(170): Phalcon\Db\Adapter\Pdo->__construct(Array)
+#3 [internal function]: Closure->{closure}()
+#4 [internal function]: Phalcon\Di\Service->resolve(NULL, Object(Phalcon\Di))
+#5 D:\phpStudy\WWW\demo\applications\common\library\Model.php(108): Phalcon\Di->get('db')
+#6 D:\phpStudy\WWW\demo\applications\backend\library\ControllerBase.php(61): Oupula\Library\Model->__construct()
+#7 D:\phpStudy\WWW\demo\applications\backend\library\ControllerBase.php(50): Oupula\Backend\Library\ControllerBase->getSettings()
+#8 [internal function]: Oupula\Backend\Library\ControllerBase->OnConstruct()
+#9 [internal function]: Phalcon\Mvc\Controller->__construct()
+#10 [internal function]: Phalcon\Di->get('Oupula\\Backend\\...', NULL)
+#11 [internal function]: Phalcon\Di->getShared('Oupula\\Backend\\...')
+#12 [internal function]: Phalcon\Dispatcher->_dispatch()
+#13 [internal function]: Phalcon\Dispatcher->dispatch()
+#14 D:\phpStudy\WWW\demo\backend\index.php(30): Phalcon\Mvc\Application->handle()
+#15 {main}
+
+2016-09-08 11:35:08||DEBUG||
+file:D:\phpStudy\WWW\demo\applications\common\config\service.php
+line:170
+code:1045
+message:SQLSTATE[HY000] [1045] Access denied for user 'rot'@'localhost' (using password: YES)
+trace:#0 [internal function]: PDO->__construct('mysql:host=loca...', 'rot', 'root', Array)
+#1 [internal function]: Phalcon\Db\Adapter\Pdo->connect(Array)
+#2 D:\phpStudy\WWW\demo\applications\common\config\service.php(170): Phalcon\Db\Adapter\Pdo->__construct(Array)
+#3 [internal function]: Closure->{closure}()
+#4 [internal function]: Phalcon\Di\Service->resolve(NULL, Object(Phalcon\Di))
+#5 D:\phpStudy\WWW\demo\applications\common\library\Model.php(108): Phalcon\Di->get('db')
+#6 D:\phpStudy\WWW\demo\applications\backend\library\ControllerBase.php(61): Oupula\Library\Model->__construct()
+#7 D:\phpStudy\WWW\demo\applications\backend\library\ControllerBase.php(50): Oupula\Backend\Library\ControllerBase->getSettings()
+#8 [internal function]: Oupula\Backend\Library\ControllerBase->OnConstruct()
+#9 [internal function]: Phalcon\Mvc\Controller->__construct()
+#10 [internal function]: Phalcon\Di->get('Oupula\\Backend\\...', NULL)
+#11 [internal function]: Phalcon\Di->getShared('Oupula\\Backend\\...')
+#12 [internal function]: Phalcon\Dispatcher->_dispatch()
+#13 [internal function]: Phalcon\Dispatcher->dispatch()
+#14 D:\phpStudy\WWW\demo\backend\index.php(30): Phalcon\Mvc\Application->handle()
+#15 {main}
+
+2016-09-08 11:35:08||DEBUG||
+file:D:\phpStudy\WWW\demo\applications\common\config\service.php
+line:170
+code:1045
+message:SQLSTATE[HY000] [1045] Access denied for user 'rot'@'localhost' (using password: YES)
+trace:#0 [internal function]: PDO->__construct('mysql:host=loca...', 'rot', 'root', Array)
+#1 [internal function]: Phalcon\Db\Adapter\Pdo->connect(Array)
+#2 D:\phpStudy\WWW\demo\applications\common\config\service.php(170): Phalcon\Db\Adapter\Pdo->__construct(Array)
+#3 [internal function]: Closure->{closure}()
+#4 [internal function]: Phalcon\Di\Service->resolve(NULL, Object(Phalcon\Di))
+#5 D:\phpStudy\WWW\demo\applications\common\library\Model.php(108): Phalcon\Di->get('db')
+#6 D:\phpStudy\WWW\demo\applications\backend\library\ControllerBase.php(61): Oupula\Library\Model->__construct()
+#7 D:\phpStudy\WWW\demo\applications\backend\library\ControllerBase.php(50): Oupula\Backend\Library\ControllerBase->getSettings()
+#8 [internal function]: Oupula\Backend\Library\ControllerBase->OnConstruct()
+#9 [internal function]: Phalcon\Mvc\Controller->__construct()
+#10 [internal function]: Phalcon\Di->get('Oupula\\Backend\\...', NULL)
+#11 [internal function]: Phalcon\Di->getShared('Oupula\\Backend\\...')
+#12 [internal function]: Phalcon\Dispatcher->_dispatch()
+#13 [internal function]: Phalcon\Dispatcher->dispatch()
+#14 D:\phpStudy\WWW\demo\backend\index.php(30): Phalcon\Mvc\Application->handle()
+#15 {main}
+
+2016-09-08 11:35:08||DEBUG||
+file:D:\phpStudy\WWW\demo\applications\common\config\service.php
+line:170
+code:1045
+message:SQLSTATE[HY000] [1045] Access denied for user 'rot'@'localhost' (using password: YES)
+trace:#0 [internal function]: PDO->__construct('mysql:host=loca...', 'rot', 'root', Array)
+#1 [internal function]: Phalcon\Db\Adapter\Pdo->connect(Array)
+#2 D:\phpStudy\WWW\demo\applications\common\config\service.php(170): Phalcon\Db\Adapter\Pdo->__construct(Array)
+#3 [internal function]: Closure->{closure}()
+#4 [internal function]: Phalcon\Di\Service->resolve(NULL, Object(Phalcon\Di))
+#5 D:\phpStudy\WWW\demo\applications\common\library\Model.php(108): Phalcon\Di->get('db')
+#6 D:\phpStudy\WWW\demo\applications\backend\library\ControllerBase.php(61): Oupula\Library\Model->__construct()
+#7 D:\phpStudy\WWW\demo\applications\backend\library\ControllerBase.php(50): Oupula\Backend\Library\ControllerBase->getSettings()
+#8 [internal function]: Oupula\Backend\Library\ControllerBase->OnConstruct()
+#9 [internal function]: Phalcon\Mvc\Controller->__construct()
+#10 [internal function]: Phalcon\Di->get('Oupula\\Backend\\...', NULL)
+#11 [internal function]: Phalcon\Di->getShared('Oupula\\Backend\\...')
+#12 [internal function]: Phalcon\Dispatcher->_dispatch()
+#13 [internal function]: Phalcon\Dispatcher->dispatch()
+#14 D:\phpStudy\WWW\demo\backend\index.php(30): Phalcon\Mvc\Application->handle()
+#15 {main}
+
+2016-09-08 11:35:08||DEBUG||
+file:D:\phpStudy\WWW\demo\applications\common\config\service.php
+line:170
+code:1045
+message:SQLSTATE[HY000] [1045] Access denied for user 'rot'@'localhost' (using password: YES)
+trace:#0 [internal function]: PDO->__construct('mysql:host=loca...', 'rot', 'root', Array)
+#1 [internal function]: Phalcon\Db\Adapter\Pdo->connect(Array)
+#2 D:\phpStudy\WWW\demo\applications\common\config\service.php(170): Phalcon\Db\Adapter\Pdo->__construct(Array)
+#3 [internal function]: Closure->{closure}()
+#4 [internal function]: Phalcon\Di\Service->resolve(NULL, Object(Phalcon\Di))
+#5 D:\phpStudy\WWW\demo\applications\common\library\Model.php(108): Phalcon\Di->get('db')
+#6 D:\phpStudy\WWW\demo\applications\backend\library\ControllerBase.php(61): Oupula\Library\Model->__construct()
+#7 D:\phpStudy\WWW\demo\applications\backend\library\ControllerBase.php(50): Oupula\Backend\Library\ControllerBase->getSettings()
+#8 [internal function]: Oupula\Backend\Library\ControllerBase->OnConstruct()
+#9 [internal function]: Phalcon\Mvc\Controller->__construct()
+#10 [internal function]: Phalcon\Di->get('Oupula\\Backend\\...', NULL)
+#11 [internal function]: Phalcon\Di->getShared('Oupula\\Backend\\...')
+#12 [internal function]: Phalcon\Dispatcher->_dispatch()
+#13 [internal function]: Phalcon\Dispatcher->dispatch()
+#14 D:\phpStudy\WWW\demo\backend\index.php(30): Phalcon\Mvc\Application->handle()
+#15 {main}
+
+2016-09-08 11:35:09||DEBUG||
+file:D:\phpStudy\WWW\demo\applications\common\config\service.php
+line:170
+code:1045
+message:SQLSTATE[HY000] [1045] Access denied for user 'rot'@'localhost' (using password: YES)
+trace:#0 [internal function]: PDO->__construct('mysql:host=loca...', 'rot', 'root', Array)
+#1 [internal function]: Phalcon\Db\Adapter\Pdo->connect(Array)
+#2 D:\phpStudy\WWW\demo\applications\common\config\service.php(170): Phalcon\Db\Adapter\Pdo->__construct(Array)
+#3 [internal function]: Closure->{closure}()
+#4 [internal function]: Phalcon\Di\Service->resolve(NULL, Object(Phalcon\Di))
+#5 D:\phpStudy\WWW\demo\applications\common\library\Model.php(108): Phalcon\Di->get('db')
+#6 D:\phpStudy\WWW\demo\applications\backend\library\ControllerBase.php(61): Oupula\Library\Model->__construct()
+#7 D:\phpStudy\WWW\demo\applications\backend\library\ControllerBase.php(50): Oupula\Backend\Library\ControllerBase->getSettings()
+#8 [internal function]: Oupula\Backend\Library\ControllerBase->OnConstruct()
+#9 [internal function]: Phalcon\Mvc\Controller->__construct()
+#10 [internal function]: Phalcon\Di->get('Oupula\\Backend\\...', NULL)
+#11 [internal function]: Phalcon\Di->getShared('Oupula\\Backend\\...')
+#12 [internal function]: Phalcon\Dispatcher->_dispatch()
+#13 [internal function]: Phalcon\Dispatcher->dispatch()
+#14 D:\phpStudy\WWW\demo\backend\index.php(30): Phalcon\Mvc\Application->handle()
+#15 {main}
+
+2016-09-08 11:35:09||DEBUG||
+file:D:\phpStudy\WWW\demo\applications\common\config\service.php
+line:170
+code:1045
+message:SQLSTATE[HY000] [1045] Access denied for user 'rot'@'localhost' (using password: YES)
+trace:#0 [internal function]: PDO->__construct('mysql:host=loca...', 'rot', 'root', Array)
+#1 [internal function]: Phalcon\Db\Adapter\Pdo->connect(Array)
+#2 D:\phpStudy\WWW\demo\applications\common\config\service.php(170): Phalcon\Db\Adapter\Pdo->__construct(Array)
+#3 [internal function]: Closure->{closure}()
+#4 [internal function]: Phalcon\Di\Service->resolve(NULL, Object(Phalcon\Di))
+#5 D:\phpStudy\WWW\demo\applications\common\library\Model.php(108): Phalcon\Di->get('db')
+#6 D:\phpStudy\WWW\demo\applications\backend\library\ControllerBase.php(61): Oupula\Library\Model->__construct()
+#7 D:\phpStudy\WWW\demo\applications\backend\library\ControllerBase.php(50): Oupula\Backend\Library\ControllerBase->getSettings()
+#8 [internal function]: Oupula\Backend\Library\ControllerBase->OnConstruct()
+#9 [internal function]: Phalcon\Mvc\Controller->__construct()
+#10 [internal function]: Phalcon\Di->get('Oupula\\Backend\\...', NULL)
+#11 [internal function]: Phalcon\Di->getShared('Oupula\\Backend\\...')
+#12 [internal function]: Phalcon\Dispatcher->_dispatch()
+#13 [internal function]: Phalcon\Dispatcher->dispatch()
+#14 D:\phpStudy\WWW\demo\backend\index.php(30): Phalcon\Mvc\Application->handle()
+#15 {main}
+
+2016-09-08 11:35:09||DEBUG||
+file:D:\phpStudy\WWW\demo\applications\common\config\service.php
+line:170
+code:1045
+message:SQLSTATE[HY000] [1045] Access denied for user 'rot'@'localhost' (using password: YES)
+trace:#0 [internal function]: PDO->__construct('mysql:host=loca...', 'rot', 'root', Array)
+#1 [internal function]: Phalcon\Db\Adapter\Pdo->connect(Array)
+#2 D:\phpStudy\WWW\demo\applications\common\config\service.php(170): Phalcon\Db\Adapter\Pdo->__construct(Array)
+#3 [internal function]: Closure->{closure}()
+#4 [internal function]: Phalcon\Di\Service->resolve(NULL, Object(Phalcon\Di))
+#5 D:\phpStudy\WWW\demo\applications\common\library\Model.php(108): Phalcon\Di->get('db')
+#6 D:\phpStudy\WWW\demo\applications\backend\library\ControllerBase.php(61): Oupula\Library\Model->__construct()
+#7 D:\phpStudy\WWW\demo\applications\backend\library\ControllerBase.php(50): Oupula\Backend\Library\ControllerBase->getSettings()
+#8 [internal function]: Oupula\Backend\Library\ControllerBase->OnConstruct()
+#9 [internal function]: Phalcon\Mvc\Controller->__construct()
+#10 [internal function]: Phalcon\Di->get('Oupula\\Backend\\...', NULL)
+#11 [internal function]: Phalcon\Di->getShared('Oupula\\Backend\\...')
+#12 [internal function]: Phalcon\Dispatcher->_dispatch()
+#13 [internal function]: Phalcon\Dispatcher->dispatch()
+#14 D:\phpStudy\WWW\demo\backend\index.php(30): Phalcon\Mvc\Application->handle()
+#15 {main}
+
+2016-09-08 11:35:09||DEBUG||
+file:D:\phpStudy\WWW\demo\applications\common\config\service.php
+line:170
+code:1045
+message:SQLSTATE[HY000] [1045] Access denied for user 'rot'@'localhost' (using password: YES)
+trace:#0 [internal function]: PDO->__construct('mysql:host=loca...', 'rot', 'root', Array)
+#1 [internal function]: Phalcon\Db\Adapter\Pdo->connect(Array)
+#2 D:\phpStudy\WWW\demo\applications\common\config\service.php(170): Phalcon\Db\Adapter\Pdo->__construct(Array)
+#3 [internal function]: Closure->{closure}()
+#4 [internal function]: Phalcon\Di\Service->resolve(NULL, Object(Phalcon\Di))
+#5 D:\phpStudy\WWW\demo\applications\common\library\Model.php(108): Phalcon\Di->get('db')
+#6 D:\phpStudy\WWW\demo\applications\backend\library\ControllerBase.php(61): Oupula\Library\Model->__construct()
+#7 D:\phpStudy\WWW\demo\applications\backend\library\ControllerBase.php(50): Oupula\Backend\Library\ControllerBase->getSettings()
+#8 [internal function]: Oupula\Backend\Library\ControllerBase->OnConstruct()
+#9 [internal function]: Phalcon\Mvc\Controller->__construct()
+#10 [internal function]: Phalcon\Di->get('Oupula\\Backend\\...', NULL)
+#11 [internal function]: Phalcon\Di->getShared('Oupula\\Backend\\...')
+#12 [internal function]: Phalcon\Dispatcher->_dispatch()
+#13 [internal function]: Phalcon\Dispatcher->dispatch()
+#14 D:\phpStudy\WWW\demo\backend\index.php(30): Phalcon\Mvc\Application->handle()
+#15 {main}
+
+2016-09-08 11:35:10||DEBUG||
+file:D:\phpStudy\WWW\demo\applications\common\config\service.php
+line:170
+code:1045
+message:SQLSTATE[HY000] [1045] Access denied for user 'rot'@'localhost' (using password: YES)
+trace:#0 [internal function]: PDO->__construct('mysql:host=loca...', 'rot', 'root', Array)
+#1 [internal function]: Phalcon\Db\Adapter\Pdo->connect(Array)
+#2 D:\phpStudy\WWW\demo\applications\common\config\service.php(170): Phalcon\Db\Adapter\Pdo->__construct(Array)
+#3 [internal function]: Closure->{closure}()
+#4 [internal function]: Phalcon\Di\Service->resolve(NULL, Object(Phalcon\Di))
+#5 D:\phpStudy\WWW\demo\applications\common\library\Model.php(108): Phalcon\Di->get('db')
+#6 D:\phpStudy\WWW\demo\applications\backend\library\ControllerBase.php(61): Oupula\Library\Model->__construct()
+#7 D:\phpStudy\WWW\demo\applications\backend\library\ControllerBase.php(50): Oupula\Backend\Library\ControllerBase->getSettings()
+#8 [internal function]: Oupula\Backend\Library\ControllerBase->OnConstruct()
+#9 [internal function]: Phalcon\Mvc\Controller->__construct()
+#10 [internal function]: Phalcon\Di->get('Oupula\\Backend\\...', NULL)
+#11 [internal function]: Phalcon\Di->getShared('Oupula\\Backend\\...')
+#12 [internal function]: Phalcon\Dispatcher->_dispatch()
+#13 [internal function]: Phalcon\Dispatcher->dispatch()
+#14 D:\phpStudy\WWW\demo\backend\index.php(30): Phalcon\Mvc\Application->handle()
+#15 {main}
+
+2016-09-08 11:41:49||DEBUG||
+file:D:\phpStudy\WWW\demo\backend\index.php
+line:30
+code:2
+message:Oupula\Backend\Controllers\AttachmentController handler class cannot be loaded
+trace:#0 [internal function]: Phalcon\Mvc\Dispatcher->_throwDispatchException('Oupula\\Backend\\...', 2)
+#1 [internal function]: Phalcon\Dispatcher->_dispatch()
+#2 [internal function]: Phalcon\Dispatcher->dispatch()
+#3 D:\phpStudy\WWW\demo\backend\index.php(30): Phalcon\Mvc\Application->handle()
+#4 {main}
+
+2016-09-08 11:41:51||DEBUG||
+file:D:\phpStudy\WWW\demo\backend\index.php
+line:30
+code:2
+message:Oupula\Backend\Controllers\AttachmentController handler class cannot be loaded
+trace:#0 [internal function]: Phalcon\Mvc\Dispatcher->_throwDispatchException('Oupula\\Backend\\...', 2)
+#1 [internal function]: Phalcon\Dispatcher->_dispatch()
+#2 [internal function]: Phalcon\Dispatcher->dispatch()
+#3 D:\phpStudy\WWW\demo\backend\index.php(30): Phalcon\Mvc\Application->handle()
+#4 {main}
+
+2016-09-08 11:41:53||DEBUG||
+file:D:\phpStudy\WWW\demo\backend\index.php
+line:30
+code:2
+message:Oupula\Backend\Controllers\AttachmentController handler class cannot be loaded
+trace:#0 [internal function]: Phalcon\Mvc\Dispatcher->_throwDispatchException('Oupula\\Backend\\...', 2)
+#1 [internal function]: Phalcon\Dispatcher->_dispatch()
+#2 [internal function]: Phalcon\Dispatcher->dispatch()
+#3 D:\phpStudy\WWW\demo\backend\index.php(30): Phalcon\Mvc\Application->handle()
+#4 {main}
+
+2016-09-08 14:32:05||DEBUG||
+file:D:\phpStudy\WWW\demo\backend\index.php
+line:30
+code:2
+message:Oupula\Backend\Controllers\AttachmentController handler class cannot be loaded
+trace:#0 [internal function]: Phalcon\Mvc\Dispatcher->_throwDispatchException('Oupula\\Backend\\...', 2)
+#1 [internal function]: Phalcon\Dispatcher->_dispatch()
+#2 [internal function]: Phalcon\Dispatcher->dispatch()
+#3 D:\phpStudy\WWW\demo\backend\index.php(30): Phalcon\Mvc\Application->handle()
+#4 {main}
+
+2016-09-08 14:32:05||DEBUG||
+file:D:\phpStudy\WWW\demo\backend\index.php
+line:30
+code:2
+message:Oupula\Backend\Controllers\AttachmentController handler class cannot be loaded
+trace:#0 [internal function]: Phalcon\Mvc\Dispatcher->_throwDispatchException('Oupula\\Backend\\...', 2)
+#1 [internal function]: Phalcon\Dispatcher->_dispatch()
+#2 [internal function]: Phalcon\Dispatcher->dispatch()
+#3 D:\phpStudy\WWW\demo\backend\index.php(30): Phalcon\Mvc\Application->handle()
+#4 {main}
+
+2016-09-08 14:32:05||DEBUG||
+file:D:\phpStudy\WWW\demo\backend\index.php
+line:30
+code:2
+message:Oupula\Backend\Controllers\AttachmentController handler class cannot be loaded
+trace:#0 [internal function]: Phalcon\Mvc\Dispatcher->_throwDispatchException('Oupula\\Backend\\...', 2)
+#1 [internal function]: Phalcon\Dispatcher->_dispatch()
+#2 [internal function]: Phalcon\Dispatcher->dispatch()
+#3 D:\phpStudy\WWW\demo\backend\index.php(30): Phalcon\Mvc\Application->handle()
+#4 {main}
+
+2016-09-09 09:19:36||DEBUG||
+file:D:\phpStudy\WWW\demo\backend\index.php
+line:30
+code:2
+message:Oupula\Backend\Controllers\AttachmentController handler class cannot be loaded
+trace:#0 [internal function]: Phalcon\Mvc\Dispatcher->_throwDispatchException('Oupula\\Backend\\...', 2)
+#1 [internal function]: Phalcon\Dispatcher->_dispatch()
+#2 [internal function]: Phalcon\Dispatcher->dispatch()
+#3 D:\phpStudy\WWW\demo\backend\index.php(30): Phalcon\Mvc\Application->handle()
+#4 {main}
+
+2016-09-09 10:35:09||DEBUG||
+file:D:\phpStudy\WWW\wuliwen\demo\backend\index.php
+line:30
+code:5
+message:Action 'index' was not found on handler 'port'
+trace:#0 [internal function]: Phalcon\Mvc\Dispatcher->_throwDispatchException('Action 'index' ...', 5)
+#1 [internal function]: Phalcon\Dispatcher->_dispatch()
+#2 [internal function]: Phalcon\Dispatcher->dispatch()
+#3 D:\phpStudy\WWW\wuliwen\demo\backend\index.php(30): Phalcon\Mvc\Application->handle()
+#4 {main}
+
+2016-09-09 10:35:37||DEBUG||
+file:D:\phpStudy\WWW\wuliwen\demo\backend\index.php
+line:30
+code:5
+message:Action 'index' was not found on handler 'port'
+trace:#0 [internal function]: Phalcon\Mvc\Dispatcher->_throwDispatchException('Action 'index' ...', 5)
+#1 [internal function]: Phalcon\Dispatcher->_dispatch()
+#2 [internal function]: Phalcon\Dispatcher->dispatch()
+#3 D:\phpStudy\WWW\wuliwen\demo\backend\index.php(30): Phalcon\Mvc\Application->handle()
+#4 {main}
+
+2016-09-09 10:35:37||DEBUG||
+file:D:\phpStudy\WWW\wuliwen\demo\backend\index.php
+line:30
+code:5
+message:Action 'index' was not found on handler 'port'
+trace:#0 [internal function]: Phalcon\Mvc\Dispatcher->_throwDispatchException('Action 'index' ...', 5)
+#1 [internal function]: Phalcon\Dispatcher->_dispatch()
+#2 [internal function]: Phalcon\Dispatcher->dispatch()
+#3 D:\phpStudy\WWW\wuliwen\demo\backend\index.php(30): Phalcon\Mvc\Application->handle()
+#4 {main}
+
+2016-09-09 11:37:46||DEBUG||
+file:D:\phpStudy\WWW\wuliwen\demo\backend\index.php
+line:31
+code:2
+message:Oupula\Backend\Controllers\AttachmentController handler class cannot be loaded
+trace:#0 [internal function]: Phalcon\Mvc\Dispatcher->_throwDispatchException('Oupula\\Backend\\...', 2)
+#1 [internal function]: Phalcon\Dispatcher->_dispatch()
+#2 [internal function]: Phalcon\Dispatcher->dispatch()
+#3 D:\phpStudy\WWW\wuliwen\demo\backend\index.php(31): Phalcon\Mvc\Application->handle()
+#4 {main}
+
+2016-09-09 16:47:54||DEBUG||
+file:D:\phpStudy\WWW\wuliwen\demo\backend\index.php
+line:31
+code:2
+message:Oupula\Backend\Controllers\AttachmentController handler class cannot be loaded
+trace:#0 [internal function]: Phalcon\Mvc\Dispatcher->_throwDispatchException('Oupula\\Backend\\...', 2)
+#1 [internal function]: Phalcon\Dispatcher->_dispatch()
+#2 [internal function]: Phalcon\Dispatcher->dispatch()
+#3 D:\phpStudy\WWW\wuliwen\demo\backend\index.php(31): Phalcon\Mvc\Application->handle()
+#4 {main}
+
+2016-09-11 16:46:26||DEBUG||
+file:G:\phpStudy\WWW\wuliwen\demo\applications\backend\library\ControllerBase.php
+line:60
+code:0
+message:Could not connect to the Redisd server 127.0.0.1:6379
+trace:#0 [internal function]: Phalcon\Cache\Backend\Redis->_connect()
+#1 G:\phpStudy\WWW\wuliwen\demo\applications\backend\library\ControllerBase.php(60): Phalcon\Cache\Backend\Redis->get('settings')
+#2 G:\phpStudy\WWW\wuliwen\demo\applications\backend\library\ControllerBase.php(51): Oupula\Backend\Library\ControllerBase->getSettings()
+#3 [internal function]: Oupula\Backend\Library\ControllerBase->OnConstruct()
+#4 [internal function]: Phalcon\Mvc\Controller->__construct()
+#5 [internal function]: Phalcon\Di->get('Oupula\\Backend\\...', NULL)
+#6 [internal function]: Phalcon\Di->getShared('Oupula\\Backend\\...')
+#7 [internal function]: Phalcon\Dispatcher->_dispatch()
+#8 [internal function]: Phalcon\Dispatcher->dispatch()
+#9 G:\phpStudy\WWW\wuliwen\demo\backend\index.php(31): Phalcon\Mvc\Application->handle()
+#10 {main}
+
+2016-09-11 16:46:27||DEBUG||
+file:G:\phpStudy\WWW\wuliwen\demo\applications\backend\library\ControllerBase.php
+line:60
+code:0
+message:Could not connect to the Redisd server 127.0.0.1:6379
+trace:#0 [internal function]: Phalcon\Cache\Backend\Redis->_connect()
+#1 G:\phpStudy\WWW\wuliwen\demo\applications\backend\library\ControllerBase.php(60): Phalcon\Cache\Backend\Redis->get('settings')
+#2 G:\phpStudy\WWW\wuliwen\demo\applications\backend\library\ControllerBase.php(51): Oupula\Backend\Library\ControllerBase->getSettings()
+#3 [internal function]: Oupula\Backend\Library\ControllerBase->OnConstruct()
+#4 [internal function]: Phalcon\Mvc\Controller->__construct()
+#5 [internal function]: Phalcon\Di->get('Oupula\\Backend\\...', NULL)
+#6 [internal function]: Phalcon\Di->getShared('Oupula\\Backend\\...')
+#7 [internal function]: Phalcon\Dispatcher->_dispatch()
+#8 [internal function]: Phalcon\Dispatcher->dispatch()
+#9 G:\phpStudy\WWW\wuliwen\demo\backend\index.php(31): Phalcon\Mvc\Application->handle()
+#10 {main}
+
+2016-09-11 16:59:58||DEBUG||
+file:G:\phpStudy\WWW\wuliwen\demo\applications\common\library\Model.php
+line:445
+code:0
+message:METHOD_NOT_EXIST
+trace:#0 G:\phpStudy\WWW\wuliwen\demo\applications\backend\controllers\PortController.php(41): Oupula\Library\Model->__call('query', Array)
+#1 G:\phpStudy\WWW\wuliwen\demo\applications\backend\controllers\PortController.php(41): Oupula\Models\PortModel->query('__OPERATION_ARE...', true)
+#2 [internal function]: Oupula\Backend\Controllers\PortController->operationAreaListAction()
+#3 [internal function]: Phalcon\Dispatcher->callActionMethod(Object(Oupula\Backend\Controllers\PortController), 'operationAreaLi...', Array)
+#4 [internal function]: Phalcon\Dispatcher->_dispatch()
+#5 [internal function]: Phalcon\Dispatcher->dispatch()
+#6 G:\phpStudy\WWW\wuliwen\demo\backend\index.php(31): Phalcon\Mvc\Application->handle()
+#7 {main}
+
+2016-09-11 17:05:57||DEBUG||
+file:G:\phpStudy\WWW\wuliwen\demo\applications\common\library\Model.php
+line:445
+code:0
+message:METHOD_NOT_EXIST
+trace:#0 G:\phpStudy\WWW\wuliwen\demo\applications\backend\controllers\PortController.php(42): Oupula\Library\Model->__call('query', Array)
+#1 G:\phpStudy\WWW\wuliwen\demo\applications\backend\controllers\PortController.php(42): Oupula\Models\PortModel->query('select %FIELD% ...', true)
+#2 [internal function]: Oupula\Backend\Controllers\PortController->operationAreaListAction()
+#3 [internal function]: Phalcon\Dispatcher->callActionMethod(Object(Oupula\Backend\Controllers\PortController), 'operationAreaLi...', Array)
+#4 [internal function]: Phalcon\Dispatcher->_dispatch()
+#5 [internal function]: Phalcon\Dispatcher->dispatch()
+#6 G:\phpStudy\WWW\wuliwen\demo\backend\index.php(31): Phalcon\Mvc\Application->handle()
+#7 {main}
+
+2016-09-11 17:06:40||DEBUG||
+file:G:\phpStudy\WWW\wuliwen\demo\applications\common\library\Model.php
+line:445
+code:0
+message:METHOD_NOT_EXIST
+trace:#0 G:\phpStudy\WWW\wuliwen\demo\applications\backend\controllers\PortController.php(42): Oupula\Library\Model->__call('query', Array)
+#1 G:\phpStudy\WWW\wuliwen\demo\applications\backend\controllers\PortController.php(42): Oupula\Models\PortModel->query('select %FIELD% ...', true)
+#2 [internal function]: Oupula\Backend\Controllers\PortController->operationAreaListAction()
+#3 [internal function]: Phalcon\Dispatcher->callActionMethod(Object(Oupula\Backend\Controllers\PortController), 'operationAreaLi...', Array)
+#4 [internal function]: Phalcon\Dispatcher->_dispatch()
+#5 [internal function]: Phalcon\Dispatcher->dispatch()
+#6 G:\phpStudy\WWW\wuliwen\demo\backend\index.php(31): Phalcon\Mvc\Application->handle()
+#7 {main}
+
+2016-09-11 17:12:05||DEBUG||
+file:G:\phpStudy\WWW\wuliwen\demo\applications\common\library\Model.php
+line:445
+code:0
+message:METHOD_NOT_EXIST
+trace:#0 G:\phpStudy\WWW\wuliwen\demo\applications\backend\controllers\PortController.php(43): Oupula\Library\Model->__call('query', Array)
+#1 G:\phpStudy\WWW\wuliwen\demo\applications\backend\controllers\PortController.php(43): Oupula\Models\PortModel->query('SELECT oa.*,p.n...')
+#2 [internal function]: Oupula\Backend\Controllers\PortController->operationAreaListAction()
+#3 [internal function]: Phalcon\Dispatcher->callActionMethod(Object(Oupula\Backend\Controllers\PortController), 'operationAreaLi...', Array)
+#4 [internal function]: Phalcon\Dispatcher->_dispatch()
+#5 [internal function]: Phalcon\Dispatcher->dispatch()
+#6 G:\phpStudy\WWW\wuliwen\demo\backend\index.php(31): Phalcon\Mvc\Application->handle()
+#7 {main}
+
+2016-09-11 17:17:06||DEBUG||
+file:G:\phpStudy\WWW\wuliwen\demo\applications\common\library\Model.php
+line:445
+code:0
+message:METHOD_NOT_EXIST
+trace:#0 G:\phpStudy\WWW\wuliwen\demo\applications\backend\controllers\PortController.php(44): Oupula\Library\Model->__call('query', Array)
+#1 G:\phpStudy\WWW\wuliwen\demo\applications\backend\controllers\PortController.php(44): Oupula\Models\PortModel->query('SELECT oa.*,p.n...')
+#2 [internal function]: Oupula\Backend\Controllers\PortController->operationAreaListAction()
+#3 [internal function]: Phalcon\Dispatcher->callActionMethod(Object(Oupula\Backend\Controllers\PortController), 'operationAreaLi...', Array)
+#4 [internal function]: Phalcon\Dispatcher->_dispatch()
+#5 [internal function]: Phalcon\Dispatcher->dispatch()
+#6 G:\phpStudy\WWW\wuliwen\demo\backend\index.php(31): Phalcon\Mvc\Application->handle()
+#7 {main}
+
+2016-09-12 14:20:48||DEBUG||
+file:D:\phpStudy\WWW\wuliwen\demo\backend\index.php
+line:31
+code:2
+message:Oupula\Backend\Controllers\AttachmentController handler class cannot be loaded
+trace:#0 [internal function]: Phalcon\Mvc\Dispatcher->_throwDispatchException('Oupula\\Backend\\...', 2)
+#1 [internal function]: Phalcon\Dispatcher->_dispatch()
+#2 [internal function]: Phalcon\Dispatcher->dispatch()
+#3 D:\phpStudy\WWW\wuliwen\demo\backend\index.php(31): Phalcon\Mvc\Application->handle()
+#4 {main}
+
+2016-09-12 14:20:54||DEBUG||
+file:D:\phpStudy\WWW\wuliwen\demo\backend\index.php
+line:31
+code:2
+message:Oupula\Backend\Controllers\AttachmentController handler class cannot be loaded
+trace:#0 [internal function]: Phalcon\Mvc\Dispatcher->_throwDispatchException('Oupula\\Backend\\...', 2)
+#1 [internal function]: Phalcon\Dispatcher->_dispatch()
+#2 [internal function]: Phalcon\Dispatcher->dispatch()
+#3 D:\phpStudy\WWW\wuliwen\demo\backend\index.php(31): Phalcon\Mvc\Application->handle()
+#4 {main}
+
+2016-09-12 14:21:08||DEBUG||
+file:D:\phpStudy\WWW\wuliwen\demo\backend\index.php
+line:31
+code:2
+message:Oupula\Backend\Controllers\AttachmentController handler class cannot be loaded
+trace:#0 [internal function]: Phalcon\Mvc\Dispatcher->_throwDispatchException('Oupula\\Backend\\...', 2)
+#1 [internal function]: Phalcon\Dispatcher->_dispatch()
+#2 [internal function]: Phalcon\Dispatcher->dispatch()
+#3 D:\phpStudy\WWW\wuliwen\demo\backend\index.php(31): Phalcon\Mvc\Application->handle()
+#4 {main}
+
+2016-09-12 14:21:26||DEBUG||
+file:D:\phpStudy\WWW\wuliwen\demo\backend\index.php
+line:31
+code:2
+message:Oupula\Backend\Controllers\AttachmentController handler class cannot be loaded
+trace:#0 [internal function]: Phalcon\Mvc\Dispatcher->_throwDispatchException('Oupula\\Backend\\...', 2)
+#1 [internal function]: Phalcon\Dispatcher->_dispatch()
+#2 [internal function]: Phalcon\Dispatcher->dispatch()
+#3 D:\phpStudy\WWW\wuliwen\demo\backend\index.php(31): Phalcon\Mvc\Application->handle()
+#4 {main}
+
+2016-09-12 14:22:00||DEBUG||
+file:D:\phpStudy\WWW\wuliwen\demo\backend\index.php
+line:31
+code:2
+message:Oupula\Backend\Controllers\AttachmentController handler class cannot be loaded
+trace:#0 [internal function]: Phalcon\Mvc\Dispatcher->_throwDispatchException('Oupula\\Backend\\...', 2)
+#1 [internal function]: Phalcon\Dispatcher->_dispatch()
+#2 [internal function]: Phalcon\Dispatcher->dispatch()
+#3 D:\phpStudy\WWW\wuliwen\demo\backend\index.php(31): Phalcon\Mvc\Application->handle()
+#4 {main}
+
+2016-09-12 14:22:05||DEBUG||
+file:D:\phpStudy\WWW\wuliwen\demo\backend\index.php
+line:31
+code:2
+message:Oupula\Backend\Controllers\AttachmentController handler class cannot be loaded
+trace:#0 [internal function]: Phalcon\Mvc\Dispatcher->_throwDispatchException('Oupula\\Backend\\...', 2)
+#1 [internal function]: Phalcon\Dispatcher->_dispatch()
+#2 [internal function]: Phalcon\Dispatcher->dispatch()
+#3 D:\phpStudy\WWW\wuliwen\demo\backend\index.php(31): Phalcon\Mvc\Application->handle()
+#4 {main}
+
+2016-09-12 14:22:35||DEBUG||
+file:D:\phpStudy\WWW\wuliwen\demo\backend\index.php
+line:31
+code:2
+message:Oupula\Backend\Controllers\AttachmentController handler class cannot be loaded
+trace:#0 [internal function]: Phalcon\Mvc\Dispatcher->_throwDispatchException('Oupula\\Backend\\...', 2)
+#1 [internal function]: Phalcon\Dispatcher->_dispatch()
+#2 [internal function]: Phalcon\Dispatcher->dispatch()
+#3 D:\phpStudy\WWW\wuliwen\demo\backend\index.php(31): Phalcon\Mvc\Application->handle()
+#4 {main}
+
+2016-09-12 14:22:45||DEBUG||
+file:D:\phpStudy\WWW\wuliwen\demo\backend\index.php
+line:31
+code:2
+message:Oupula\Backend\Controllers\AttachmentController handler class cannot be loaded
+trace:#0 [internal function]: Phalcon\Mvc\Dispatcher->_throwDispatchException('Oupula\\Backend\\...', 2)
+#1 [internal function]: Phalcon\Dispatcher->_dispatch()
+#2 [internal function]: Phalcon\Dispatcher->dispatch()
+#3 D:\phpStudy\WWW\wuliwen\demo\backend\index.php(31): Phalcon\Mvc\Application->handle()
+#4 {main}
+
+2016-09-12 14:22:58||DEBUG||
+file:D:\phpStudy\WWW\wuliwen\demo\backend\index.php
+line:31
+code:2
+message:Oupula\Backend\Controllers\AttachmentController handler class cannot be loaded
+trace:#0 [internal function]: Phalcon\Mvc\Dispatcher->_throwDispatchException('Oupula\\Backend\\...', 2)
+#1 [internal function]: Phalcon\Dispatcher->_dispatch()
+#2 [internal function]: Phalcon\Dispatcher->dispatch()
+#3 D:\phpStudy\WWW\wuliwen\demo\backend\index.php(31): Phalcon\Mvc\Application->handle()
+#4 {main}
+
+2016-09-12 14:28:41||DEBUG||
+file:D:\phpStudy\WWW\wuliwen\demo\backend\index.php
+line:31
+code:2
+message:Oupula\Backend\Controllers\AttachmentController handler class cannot be loaded
+trace:#0 [internal function]: Phalcon\Mvc\Dispatcher->_throwDispatchException('Oupula\\Backend\\...', 2)
+#1 [internal function]: Phalcon\Dispatcher->_dispatch()
+#2 [internal function]: Phalcon\Dispatcher->dispatch()
+#3 D:\phpStudy\WWW\wuliwen\demo\backend\index.php(31): Phalcon\Mvc\Application->handle()
+#4 {main}
+
+2016-09-12 14:28:44||DEBUG||
+file:D:\phpStudy\WWW\wuliwen\demo\backend\index.php
+line:31
+code:2
+message:Oupula\Backend\Controllers\AttachmentController handler class cannot be loaded
+trace:#0 [internal function]: Phalcon\Mvc\Dispatcher->_throwDispatchException('Oupula\\Backend\\...', 2)
+#1 [internal function]: Phalcon\Dispatcher->_dispatch()
+#2 [internal function]: Phalcon\Dispatcher->dispatch()
+#3 D:\phpStudy\WWW\wuliwen\demo\backend\index.php(31): Phalcon\Mvc\Application->handle()
+#4 {main}
+
+2016-09-12 14:34:04||DEBUG||
+file:D:\phpStudy\WWW\wuliwen\demo\backend\index.php
+line:31
+code:2
+message:Oupula\Backend\Controllers\AttachmentController handler class cannot be loaded
+trace:#0 [internal function]: Phalcon\Mvc\Dispatcher->_throwDispatchException('Oupula\\Backend\\...', 2)
+#1 [internal function]: Phalcon\Dispatcher->_dispatch()
+#2 [internal function]: Phalcon\Dispatcher->dispatch()
+#3 D:\phpStudy\WWW\wuliwen\demo\backend\index.php(31): Phalcon\Mvc\Application->handle()
+#4 {main}
+
+2016-09-12 14:35:28||DEBUG||
+file:D:\phpStudy\WWW\wuliwen\demo\backend\index.php
+line:31
+code:2
+message:Oupula\Backend\Controllers\AttachmentController handler class cannot be loaded
+trace:#0 [internal function]: Phalcon\Mvc\Dispatcher->_throwDispatchException('Oupula\\Backend\\...', 2)
+#1 [internal function]: Phalcon\Dispatcher->_dispatch()
+#2 [internal function]: Phalcon\Dispatcher->dispatch()
+#3 D:\phpStudy\WWW\wuliwen\demo\backend\index.php(31): Phalcon\Mvc\Application->handle()
+#4 {main}
+
+2016-09-12 14:35:46||DEBUG||
+file:D:\phpStudy\WWW\wuliwen\demo\backend\index.php
+line:31
+code:2
+message:Oupula\Backend\Controllers\AttachmentController handler class cannot be loaded
+trace:#0 [internal function]: Phalcon\Mvc\Dispatcher->_throwDispatchException('Oupula\\Backend\\...', 2)
+#1 [internal function]: Phalcon\Dispatcher->_dispatch()
+#2 [internal function]: Phalcon\Dispatcher->dispatch()
+#3 D:\phpStudy\WWW\wuliwen\demo\backend\index.php(31): Phalcon\Mvc\Application->handle()
+#4 {main}
+
+2016-09-12 14:40:02||DEBUG||
+file:D:\phpStudy\WWW\wuliwen\demo\backend\index.php
+line:31
+code:2
+message:Oupula\Backend\Controllers\AttachmentController handler class cannot be loaded
+trace:#0 [internal function]: Phalcon\Mvc\Dispatcher->_throwDispatchException('Oupula\\Backend\\...', 2)
+#1 [internal function]: Phalcon\Dispatcher->_dispatch()
+#2 [internal function]: Phalcon\Dispatcher->dispatch()
+#3 D:\phpStudy\WWW\wuliwen\demo\backend\index.php(31): Phalcon\Mvc\Application->handle()
+#4 {main}
+
+2016-09-12 14:40:33||DEBUG||
+file:D:\phpStudy\WWW\wuliwen\demo\backend\index.php
+line:31
+code:2
+message:Oupula\Backend\Controllers\AttachmentController handler class cannot be loaded
+trace:#0 [internal function]: Phalcon\Mvc\Dispatcher->_throwDispatchException('Oupula\\Backend\\...', 2)
+#1 [internal function]: Phalcon\Dispatcher->_dispatch()
+#2 [internal function]: Phalcon\Dispatcher->dispatch()
+#3 D:\phpStudy\WWW\wuliwen\demo\backend\index.php(31): Phalcon\Mvc\Application->handle()
+#4 {main}
+
+2016-09-12 14:41:09||DEBUG||
+file:D:\phpStudy\WWW\wuliwen\demo\backend\index.php
+line:31
+code:0
+message:Scanning error before 'form').ajaxForm(...' in D:\phpStudy\WWW\wuliwen\demo\backend/../applications/backend/views/queuing/queuingList.html on line 7
+trace:#0 [internal function]: Phalcon\Mvc\View\Engine\Volt\Compiler->_compileSource('
+
+2016-09-12 14:41:16||DEBUG||
+file:D:\phpStudy\WWW\wuliwen\demo\backend\index.php
+line:31
+code:2
+message:Oupula\Backend\Controllers\AttachmentController handler class cannot be loaded
+trace:#0 [internal function]: Phalcon\Mvc\Dispatcher->_throwDispatchException('Oupula\\Backend\\...', 2)
+#1 [internal function]: Phalcon\Dispatcher->_dispatch()
+#2 [internal function]: Phalcon\Dispatcher->dispatch()
+#3 D:\phpStudy\WWW\wuliwen\demo\backend\index.php(31): Phalcon\Mvc\Application->handle()
+#4 {main}
+
+2016-09-12 14:42:05||DEBUG||
+file:D:\phpStudy\WWW\wuliwen\demo\backend\index.php
+line:31
+code:2
+message:Oupula\Backend\Controllers\AttachmentController handler class cannot be loaded
+trace:#0 [internal function]: Phalcon\Mvc\Dispatcher->_throwDispatchException('Oupula\\Backend\\...', 2)
+#1 [internal function]: Phalcon\Dispatcher->_dispatch()
+#2 [internal function]: Phalcon\Dispatcher->dispatch()
+#3 D:\phpStudy\WWW\wuliwen\demo\backend\index.php(31): Phalcon\Mvc\Application->handle()
+#4 {main}
+
+2016-09-12 15:08:47||DEBUG||
+file:D:\phpStudy\WWW\wuliwen\demo\backend\index.php
+line:31
+code:2
+message:Oupula\Backend\Controllers\AttachmentController handler class cannot be loaded
+trace:#0 [internal function]: Phalcon\Mvc\Dispatcher->_throwDispatchException('Oupula\\Backend\\...', 2)
+#1 [internal function]: Phalcon\Dispatcher->_dispatch()
+#2 [internal function]: Phalcon\Dispatcher->dispatch()
+#3 D:\phpStudy\WWW\wuliwen\demo\backend\index.php(31): Phalcon\Mvc\Application->handle()
+#4 {main}
+
+2016-09-12 15:09:16||DEBUG||
+file:D:\phpStudy\WWW\wuliwen\demo\backend\index.php
+line:31
+code:2
+message:Oupula\Backend\Controllers\AttachmentController handler class cannot be loaded
+trace:#0 [internal function]: Phalcon\Mvc\Dispatcher->_throwDispatchException('Oupula\\Backend\\...', 2)
+#1 [internal function]: Phalcon\Dispatcher->_dispatch()
+#2 [internal function]: Phalcon\Dispatcher->dispatch()
+#3 D:\phpStudy\WWW\wuliwen\demo\backend\index.php(31): Phalcon\Mvc\Application->handle()
+#4 {main}
+
+2016-09-12 15:14:09||DEBUG||
+file:D:\phpStudy\WWW\wuliwen\demo\backend\index.php
+line:31
+code:2
+message:Oupula\Backend\Controllers\AttachmentController handler class cannot be loaded
+trace:#0 [internal function]: Phalcon\Mvc\Dispatcher->_throwDispatchException('Oupula\\Backend\\...', 2)
+#1 [internal function]: Phalcon\Dispatcher->_dispatch()
+#2 [internal function]: Phalcon\Dispatcher->dispatch()
+#3 D:\phpStudy\WWW\wuliwen\demo\backend\index.php(31): Phalcon\Mvc\Application->handle()
+#4 {main}
+
+2016-09-12 15:20:24||DEBUG||
+file:D:\phpStudy\WWW\wuliwen\demo\backend\index.php
+line:31
+code:2
+message:Oupula\Backend\Controllers\AttachmentController handler class cannot be loaded
+trace:#0 [internal function]: Phalcon\Mvc\Dispatcher->_throwDispatchException('Oupula\\Backend\\...', 2)
+#1 [internal function]: Phalcon\Dispatcher->_dispatch()
+#2 [internal function]: Phalcon\Dispatcher->dispatch()
+#3 D:\phpStudy\WWW\wuliwen\demo\backend\index.php(31): Phalcon\Mvc\Application->handle()
+#4 {main}
+
+2016-09-13 14:48:55||DEBUG||
+file:D:\phpStudy\WWW\wuliwen\demo\backend\index.php
+line:31
+code:0
+message:Syntax error, unexpected token STRING(,function(datasss){
+        console.log(datasss);
+    });
+
+    $.ligerDefaults.Grid.formatters[) in D:\phpStudy\WWW\wuliwen\demo\backend/../applications/backend/views/port/operationAreaList.html on line 22
+trace:#0 [internal function]: Phalcon\Mvc\View\Engine\Volt\Compiler->_compileSource('
+
+2016-09-13 14:49:49||DEBUG||
+file:D:\phpStudy\WWW\wuliwen\demo\backend\index.php
+line:31
+code:0
+message:Syntax error, unexpected token STRING(,function(datasss){
+//        console.log(datasss);
+    });
+
+    $.ligerDefaults.Grid.formatters[) in D:\phpStudy\WWW\wuliwen\demo\backend/../applications/backend/views/port/operationAreaList.html on line 22
+trace:#0 [internal function]: Phalcon\Mvc\View\Engine\Volt\Compiler->_compileSource('
+
+2016-09-13 14:49:58||DEBUG||
+file:D:\phpStudy\WWW\wuliwen\demo\backend\index.php
+line:31
+code:0
+message:Syntax error, unexpected token STRING(,function(datasss){
+//        console.log(datasss);
+//    });
+
+    $.ligerDefaults.Grid.formatters[) in D:\phpStudy\WWW\wuliwen\demo\backend/../applications/backend/views/port/operationAreaList.html on line 22
+trace:#0 [internal function]: Phalcon\Mvc\View\Engine\Volt\Compiler->_compileSource('
+
+2016-09-13 14:50:43||DEBUG||
+file:D:\phpStudy\WWW\wuliwen\demo\backend\index.php
+line:31
+code:0
+message:Syntax error, unexpected token STRING(,function(datasss){
+//        console.log(datasss);
+//    });
+
+    $.ligerDefaults.Grid.formatters[) in D:\phpStudy\WWW\wuliwen\demo\backend/../applications/backend/views/port/operationAreaList.html on line 23
+trace:#0 [internal function]: Phalcon\Mvc\View\Engine\Volt\Compiler->_compileSource('
+

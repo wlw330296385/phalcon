@@ -1,0 +1,359 @@
+<div class="container-fluid">
+    <div class="widget-box">
+        <div class="widget-title"><span class="icon"> <i class="icon-th"></i> </span>
+            <h5>{{title}}</h5>
+        </div>
+        <div class="widget-content">
+            <div id='datagrid'></div>
+            <div id='win'>
+                <form id='form1' action="" method="post"></form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    var datagrid;
+    var form1;
+    var form1_defaults = {title:'',category_id:0,img:'',content:'',hits:0,link:'',keyword:'',description:'',access:'guest',status:'regular'};
+    var win;
+
+    $.ligerDefaults.Grid.formatters['formatStatus'] = function (data, column) {
+        var list = {regular: '正常', singular: '禁用',hidden:'隐藏'};
+        return list[data] ? list[data] : data;
+    };
+
+
+    //添加操作
+    function add() {
+        form1.setData(form1_defaults);
+        $('#form1').attr('action', "{{url('Article/add')}}");
+        win._setTitle('添加文章');
+        win.show();
+    }
+
+
+    //编辑操作
+    function edit() {
+        var row = datagrid.getSelected();
+        if (!row) {
+            $.ligerDialog.error('请选择要编辑的文章');
+            return false;
+        } else {
+            form1.setData(row);
+            form1.getEditor('category_id').setText(row.category_name);
+        }
+        $('#form1').attr('action', "{{url('Article/edit')}}");
+        win._setTitle('编辑 [' + row.title + '] 文章');
+        win.show();
+    }
+
+    //删除操作
+    function del() {
+        var row = datagrid.getSelected();
+        if (!row) {
+            $.ligerDialog.error('请选择要删除的文章');
+            return false;
+        } else {
+            $.ligerDialog.confirm('确定要删除 [ ' + row.title + ' ] 文章?', function (type) {
+                if (type) {
+                    $('#form1').ajaxForm("{{url('Article/delete')}}", {id: row.id}, function (response) {
+                        if (response.status == 0) {
+                            $.ligerDialog.error(response.message);
+                        } else {
+                            $.ligerDialog.success(response.message);
+                            datagrid.reload();
+                        }
+                    });
+                }
+            });
+        }
+    }
+
+
+
+    //提交表单
+    function submitform() {
+        if (form1.valid()) {
+            var form_data = form1.getData();
+            $.post($('#form1').attr('action'), form_data, function (response) {
+                if (response.status == 0) {
+                    $.ligerDialog.error(response.message);
+                } else {
+                    $.ligerDialog.success(response.message);
+                    datagrid.reload();
+                    win.hide();
+                }
+            });
+        } else {
+            $.ligerDialog.error("表单没有通过验证,请检查红色标记的表单项");
+        }
+    }
+
+    $(function () {
+        datagrid = $('#datagrid').ligerGrid({
+            width: "100%",
+            height: "100%",
+            url: "{{url('Article/index')}}",
+            columns: [{
+                display: "编号",
+                name: "id",
+                align: "center",
+                width: 40,
+                minwidth: 40,
+                frozen: true
+            }, {
+                display: "文章标题",
+                name: "title",
+                align: "center",
+                width: 150,
+                minwidth: 60
+            }, {
+                display: "分类名称",
+                name: "category_name",
+                align: "center",
+                width: 150,
+                minwidth: 60
+            }, {
+                display: "点击数",
+                name: "hits",
+                align: "center",
+                width: 200,
+                minwidth: 60
+            }, {
+                display: "创建人",
+                name: "admin_user",
+                align: "center",
+                width: 150
+            }, {
+                display: "创建时间",
+                name: "create_time",
+                align: "center",
+                format:'Y-m-d H:i',
+                type:'date',
+                width: 120
+            }, {
+                display: "状态",
+                name: "status",
+                align: "center",
+                type:'formatStatus',
+                width: 80
+            }],
+            frozen: true,
+            toolbar: {
+                items: [
+                    {
+                        text: "添加",
+                        icon: "icon-plus",
+                        click: add
+                    },
+                    {
+                        text: "编辑",
+                        icon: "icon-edit",
+                        click: edit
+                    },
+                    {
+                        text: "删除",
+                        icon: "icon-remove",
+                        click: del
+                    }
+                ]
+            }
+        });
+
+        form1 = $('#form1').ligerForm({
+            inputwidth: 200,
+            labelwidth: 80,
+            space: 10,
+            validate: true,
+            righttoken: "&nbsp;",
+            labelalign: "right",
+            align: "left",
+            tab: {
+                items: [
+                    {
+                        title: '基本信息',
+                        fields: [
+                            {
+                                name: "id", newline: false, type: "hidden", display: "id"
+                            }, {
+                                id:'title',
+                                name:'title',
+                                newline:true,
+                                type:'textbox',
+                                display:'文章标题',
+                                aftercontent:'',
+                                width:300,
+                                validate:{required:true},
+                                editor: {
+                                    width: 300
+                                }
+                            },{
+                                id: "category_id",
+                                name: "category_id",
+                                newline: true,
+                                type: "combobox",
+                                display: "所属分类",
+                                aftercontent: "",
+                                width: 150,
+                                validate: {required: true},
+                                editor: {
+                                    cancelable: false,
+                                    width: 250,
+                                    selectboxwidth:247,
+                                    selectboxheight:280,
+                                    treeleafonly:true,
+                                    valuefield: 'id',
+                                    textfieldname:'text',
+                                    tree:{
+                                        isleaf:false,
+                                        checkbox:false,
+                                        single:true,
+                                        url:"{{url('Article/getCategory')}}",
+                                        idfield: 'id',
+                                        parentidfield: 'pid',
+                                        parms:{pid:0}
+                                    }
+                                }
+                            },{
+                                id: "img",
+                                name: "img",
+                                newline: true,
+                                type: "image",
+                                display: "文章封面",
+                                aftercontent:"",
+                                width: 200,
+                                height: 50,
+                                validate: { required: false },
+                                editor: {
+                                    preview:true,
+                                    url:"{{url('Uploader/?action=uploadimage')}}",
+                                    width: 200
+                                }
+                            },{
+                                id: "content",
+                                name: "content",
+                                newline: true,
+                                type: "editor",
+                                display: "文章内容",
+                                aftercontent:"",
+                                width: 600,
+                                height: 250,
+                                validate: { required: true },
+                                editor: {
+                                    width: 600,
+                                    height:250
+                                }
+                            },{
+                                id: "status",
+                                name: "status",
+                                newline: true,
+                                type: "combobox",
+                                display: "状态",
+                                aftercontent: "",
+                                width: 80,
+                                validate: {required: true},
+                                editor: {
+                                    width: 150,
+                                    initvalue:'no',
+                                    cancelable: false,
+                                    data:[{id:'regular',text:'正常'},{id:'singular',text:'禁用'},{id:'hidden',text:'隐藏'}]
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        title:'其他选项',
+                        fields: [
+                            {
+                                id:'keyword',
+                                name:'keyword',
+                                newline:true,
+                                type:'textbox',
+                                display:'关键字',
+                                aftercontent:'',
+                                width:300,
+                                validate:{required:false},
+                                editor: {
+                                    width: 300
+                                }
+                            },{
+                                id:'description',
+                                name:'description',
+                                newline:true,
+                                type:'textarea',
+                                display:'简介',
+                                aftercontent:'',
+                                width:300,
+                                height:80,
+                                validate:{required:false},
+                                editor: {
+                                    width: 300,
+                                    height:80
+                                }
+                            },{
+                                id: "hits",
+                                name: "hits",
+                                newline: true,
+                                type: "integer",
+                                display: "点击数",
+                                aftercontent:"",
+                                width: 100,
+                                validate: { required: true },
+                                editor: {
+                                    width: 100
+                                }
+                            },{
+                                id:'link',
+                                name:'link',
+                                newline:true,
+                                type:'textbox',
+                                display:'跳转链接',
+                                aftercontent:'不为空时点击文章跳转到该链接',
+                                width:300,
+                                validate:{required:false},
+                                editor: {
+                                    width: 300
+                                }
+                            },{
+                                id: "access",
+                                name: "access",
+                                newline: true,
+                                type: "combobox",
+                                display: "访问权限",
+                                aftercontent: "",
+                                width: 120,
+                                validate: {required: true},
+                                editor: {
+                                    width: 120,
+                                    initvalue:'guest',
+                                    cancelable: false,
+                                    data:[{id:'guest',text:'不限制'},{id:'member',text:'会员'}]
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        });
+
+        win = $.ligerDialog({
+            width: 750,
+            height: 620,
+            target: $('#win'),
+            modal: true,
+            show: false,
+            title: "幻灯片管理",
+            slide: true,
+            buttons: [
+                {
+                    text: "确认提交",
+                    icon: "icon-edit",
+                    onclick: submitform
+                }
+            ]
+        });
+        win.hide();
+    });
+</script>

@@ -1,0 +1,359 @@
+html, body {
+    width: 100%;
+    height: 100%;
+}
+
+/*Bootstrap-overlay*/
+
+body {
+    overflow-x: hidden;
+    margin:0;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 12px;
+    color: #666;
+}
+
+a {
+    color: #666;
+}
+
+a:hover, a:focus {
+    text-decoration: none;
+    color: #28b779;
+}
+
+.dropdown-menu .divider {
+    margin: 4px 0;
+}
+
+.dropdown-menu {
+    min-width: 180px;
+}
+
+.dropdown-menu > li > a {
+    padding: 3px 10px;
+    color: #666;
+    font-size: 12px;
+}
+
+.dropdown-menu > li > a i {
+    padding-right: 3px;
+}
+
+.userphoto img {
+    width: 19px;
+    height: 19px;
+}
+
+select, textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input, .label, .dropdown-menu, .btn, .well, .progress, .table-bordered, .btn-group > .btn:first-child, .btn-group > .btn:last-child, .btn-group > .btn:last-child, .btn-group > .dropdown-toggle, .alert {
+    border-radius: 0;
+}
+
+.btn, textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {
+    box-shadow: none;
+}
+
+.progress, .progress-success .bar, .progress .bar-success, .progress-warning .bar, .progress .bar-warning, .progress-danger .bar, .progress .bar-danger, .progress-info .bar, .progress .bar-info, .btn, .btn-primary {
+    background-image: none;
+}
+
+.accordion-heading h5 {
+    width: 70%;
+}
+
+#footer {
+    padding: 10px;
+    text-align: center;
+}
+
+hr {
+    border-top-color: #dadada;
+}
+
+.carousel {
+    margin-bottom: 0;
+}
+
+.fl {
+    float: left
+}
+
+.fr {
+    float: right
+}
+
+.label-important, .badge-important {
+    background: #f74d4d;
+}
+
+/*Metro Background color class*/
+.bg_lb {
+    background: #27a9e3;
+}
+
+.bg_db {
+    background: #2295c9;
+}
+
+.bg_lg {
+    background: #28b779;
+}
+
+.bg_dg {
+    background: #28b779;
+}
+
+.bg_ly {
+    background: #ffb848;
+}
+
+.bg_dy {
+    background: #da9628;
+}
+
+.bg_ls {
+    background: #2255a4;
+}
+
+.bg_lo {
+    background: #da542e;
+}
+
+.bg_lr {
+    background: #f74d4d;
+}
+
+.bg_lv {
+    background: #603bbc;
+}
+
+.bg_lh {
+    background: #b6b3b3;
+}
+
+body {
+    background-color: #2E363F;
+    padding: 0;
+    margin:0;
+}
+
+#logo, #loginbox {
+    width: 32%;
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+}
+
+#logo img {
+    margin: 0 auto;
+    display: block;
+}
+
+#loginbox {
+    width: 400px;
+    height: 430px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-left: -200px;
+    margin-top: -215px;
+}
+
+#loginbox form {
+    width: 100%;
+    background: #1f262d;
+    position: relative;
+    top: 0;
+    left: 0;
+}
+
+#loginbox .form-actions {
+    padding: 14px 20px 15px;
+}
+
+#loginbox .form-actions .pull-left {
+    margin-top: 0;
+}
+
+#loginbox form#loginform {
+    z-index: 200;
+    display: block;
+}
+
+#loginbox form#recoverform {
+    z-index: 100;
+    display: none;
+}
+
+#loginbox form#recoverform .form-actions {
+    margin-top: 10px;
+}
+
+#loginbox .main_input_box {
+    margin: 0 auto;
+    text-align: center;
+    font-size: 13px;
+}
+
+#loginbox .main_input_box .add-on {
+    padding: 9px 9px;
+    *line-height: 30px;
+    color: #fff;
+    width: 30px;
+    display: inline-block;
+}
+#loginbox .main_input_box .error{
+    border:1px dotted red;
+}
+
+/*#loginbox .main_input_box input {*/
+    /*height:28px;*/
+    /*border: 1px solid white;*/
+    /*display: inline-block;*/
+    /*width: 75%;*/
+    /*line-height: 28px;*/
+    /*margin-top:1px\9;*/
+    /*margin-bottom:1px;*/
+    /*margin-bottom:4px\9;*/
+/*}*/
+
+
+#loginbox .valid_input_box {
+    margin: 0 auto;
+    text-align: center;
+    font-size: 13px;
+}
+
+#loginbox .valid_input_box .error{
+    border:1px dotted red;
+}
+
+#loginbox .valid_input_box .add-on {
+    padding: 9px 9px;
+    *line-height: 30px;
+    color: #fff;
+    width: 30px;
+    display: inline-block;
+}
+
+#loginbox .valid_input_box input {
+    height: 28px;
+    border: 1px solid #FFF;
+    display: inline-block;
+    width: 44%;
+    line-height: 28px;
+    margin-top:0px\9;
+    margin-top:1px\0/;
+    margin-bottom: 1px;
+    margin-bottom:2px\9;
+    margin-bottom:4px\0/;
+
+}
+
+#loginbox .valid_input_box .valid-img {
+    cursor: hand;
+    height: 36px;
+    background-color:#ffffff;
+    border: 1px solid #ffffff;
+    display: inline-block;
+    width: 30%;
+    /*padding-left:5%;*/
+    line-height: 36px;
+    /*margin-bottom: 2px;*/
+}
+#loginbox .valid_input_box img {
+    top:0;
+    width:100%;
+    height:35px;
+}
+
+#loginbox .controls {
+    margin:auto;
+    width: 80%;
+    position: relative;
+}
+
+#loginbox .control-group {
+    margin: 20px 0;
+}
+
+.form-vertical {
+    margin-bottom: 0;
+    background: none;
+    border: 1px solid #CDCDCD;
+}
+
+.form-actions {
+    margin-bottom:30px;
+    background:none;
+    border:0;
+    text-align: center;
+}
+
+#loginbox .normal_text {
+    padding: 15px 10px;
+    text-align: center;
+    font-size: 14px;
+    line-height: 20px;
+    background: #1f262d;
+    color: #fff;
+}
+
+@media (max-width: 800px) {
+    #logo {
+        width: 60%;
+    }
+
+    #loginbox {
+        width: 80%
+    }
+}
+
+@media (max-width: 480px) {
+    #logo {
+        width: 40%;
+    }
+
+    #loginbox {
+        width: 90%
+    }
+
+    #loginbox .control-group {
+        padding: 8px 0;
+        margin-bottom: 0;
+    }
+}
+.label-icon{
+    float: left;
+    width: 38px;
+    height: 38px;
+    line-height: 38px;
+    color: #fff;
+    text-align: center;
+}
+.control-ipt{
+    float: left;
+    width: 80%;
+    margin: 0 auto;
+}
+.control-ipt input{
+    margin-bottom: 0 !important;
+    height: 28px;
+    width: 100%;
+    border:1px solid #fff;
+}
+.ipt-code input{
+    width: 70%;
+    float: left;
+}
+.box-code{
+    width: 24%;
+    float: left;
+    background-color: #fff;
+    position: absolute;
+    right: 0;
+    text-align: center;
+    height: 38px;
+    line-height: 38px;
+    margin-right: 12px;
+}

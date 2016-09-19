@@ -1,0 +1,174 @@
+<style>
+    .l-dialog-win .l-dialog-content {
+        padding-top: 1px;
+        overflow-y:auto;
+    }
+</style>
+
+<div class="container-fluid">
+    <div class="widget-box">
+        <div class="widget-title"><span class="icon"> <i class="icon-th"></i> </span>
+            <h5>{{title}}</h5>
+        </div>
+        <div class="widget-content">
+            <div id='datagrid'></div>
+            <div id='win'>
+                <form id='form1' action="" method="post"></form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    var datagrid;
+    var form1;
+    var form1_defaults = {id:'',content:'',key:'',name:'',status:'on',type:'loan'};
+    var win;
+
+    $.ligerDefaults.Grid.formatters['formatStatus'] = function (data, column) {
+        var list = {on:'正常',off:'禁用'};
+        var text = list[data] ? list[data] : '未知';
+        return "<span class='by label label-info'>" + text + "</span>";
+    };
+
+    $.ligerDefaults.Grid.formatters['formatType'] = function (data, column) {
+        var list = {pay:'支付接口',trust:'托管接口'};
+        var text = list[data] ? list[data] : '未知';
+        return "<span class='by label label-info'>" + text + "</span>";
+    };
+
+    $.ligerDefaults.Grid.formatters['formatLogo'] = function (data, column) {
+        if(data == null){
+            return '';
+        }
+        return "<img border='0' src='"+ data +"'>";
+    };
+
+
+    //编辑操作
+    function edit() {
+        var row = datagrid.getSelected();
+        if (!row) {
+            $.ligerDialog.error('请选择要编辑的接口');
+            return false;
+        } else {
+            $('#form1').empty();
+            $.getJSON('{{url("Payment/config")}}',{module:row.module},function(data){
+                if(data.status == 0){
+                    $.ligerDialog.error(data.message);
+                }else{
+                    form1 = $('#form1').ligerForm(data.form);
+                    form1.setData(row);
+                }
+            });
+        }
+        $('#form1').attr('action', "{{url('Payment/config')}}");
+        win._setTitle('编辑 [' + row.name + '] 接口');
+        win.show();
+    }
+
+
+    //提交表单
+    function submitform() {
+        if (form1.valid()) {
+            var form_data = form1.getData();
+            $.post($('#form1').attr('action'), form_data, function (response) {
+                if (response.status == 0) {
+                    $.ligerDialog.error(response.message);
+                } else {
+                    $.ligerDialog.success(response.message);
+                    datagrid.reload();
+                    win.hide();
+                }
+            });
+        } else {
+            $.ligerDialog.error("表单没有通过验证,请检查红色标记的表单项");
+        }
+    }
+
+    $(function () {
+        datagrid = $('#datagrid').ligerGrid({
+            width: "100%",
+            height: "100%",
+            url: "{{url('Payment/index')}}",
+            rowheight:50,
+            columns: [{
+                display: "编号",
+                name: "id",
+                align: "center",
+                width: 40,
+                minwidth: 40,
+                frozen: true
+            }, {
+                display: "接口名称",
+                name: "name",
+                align: "center",
+                width: 250,
+                minwidth: 60
+            },{
+                display: "接口类",
+                name: "module",
+                align: "center",
+                width: 150,
+                minwidth: 60
+            }, {
+                display: "接口类型",
+                name: "type",
+                align: "center",
+                type: 'formatType',
+                width: 100,
+                minwidth: 60
+            },{
+                display: "标志",
+                name: "logo",
+                align: "center",
+                type: 'formatLogo',
+                width: 150,
+                minwidth: 150
+            },{
+                display: "描述",
+                name: "description",
+                align: "center",
+                width: 200,
+                minwidth: 60
+            },{
+                display: "状态",
+                name: "status",
+                align: "center",
+                type: 'formatStatus',
+                width: 80,
+                minwidth: 60
+            }],
+            frozen: true,
+            toolbar: {
+                items: [
+                    {
+                        text: "编辑",
+                        icon: "icon-edit",
+                        click: edit
+                    }
+                ]
+            }
+        });
+
+        win = $.ligerDialog({
+            width: 600,
+            height: 362,
+            target: $('#win'),
+            modal: true,
+            show: false,
+            title: "编辑接口",
+            slide: true,
+            contentcls:'overflows',
+            buttons: [
+                {
+                    text: "确认提交",
+                    icon: "icon-edit",
+                    onclick: submitform
+                }
+            ]
+        });
+        win.hide();
+    });
+</script>

@@ -1,0 +1,7 @@
+{
+  "TypeScriptCodeGenTarget" : "ES5",
+  "compilerOptions": {
+    "target":  "es5",
+    "sourceMap": true
+  }
+}

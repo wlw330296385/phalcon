@@ -1,0 +1,344 @@
+<div class="container-fluid">
+    <div class="widget-box">
+        <div class="widget-title"><span class="icon"> <i class="icon-th"></i> </span>
+            <h5>{{title}}</h5>
+        </div>
+        <div class="widget-content">
+            <div id="datagrid"></div>
+            <form id="download_form" name="download_form" target="_blank" action="{{url('database/downloadDB')}}"
+                  method="post" class="form-horizontal"></form>
+        </div>
+    </div>
+</div>
+
+<div id="backup_dialog" style="display:none;width:500px;height:120px;overflow:hidden;">
+    <ul class="unstyled" style="padding:5px;width:490px;">
+        <li>
+            <span class="icon24 icomoon-icon-arrow-up-2 green"></span>
+            当前进度<span class="pull-right strong" id="step_text">进度内容</span>
+            <div class="progress progress-striped ">
+                <div id="step_progress" style="width: 0%;" class="bar"></div>
+            </div>
+        </li>
+        <li><span class="icon24 icomoon-icon-arrow-up-2 green"></span>
+            总进度<span class="pull-right strong" id="cur_step">当前进度</span>
+            <div class="progress progress-danger progress-striped ">
+                <div id="max_progress" style="width: 0%;" class="bar"></div>
+            </div>
+        </li>
+    </ul>
+</div>
+
+<div id="restore_dialog" style="display:none;width:500px;height:55px;overflow:hidden;">
+    <ul class="unstyled" style="padding:5px;width:490px;">
+        <li>
+            <span class="icon24 icomoon-icon-arrow-up-2 green"></span>总进度<span class="pull-right strong" id="restore_step">当前进度</span>
+            <div class="progress progress-danger progress-striped ">
+                <div id="restore_progress" style="width: 0%;" class="bar"></div>
+            </div>
+        </li>
+    </ul>
+</div>
+
+<script>
+    var datagrid;
+    var backup_dialog;
+    var restore_dialog;
+    var backup_form;
+    var download_form;
+    var steplist = ['table_struct', 'view_struct', 'procedure_struct', 'function_struct', 'event_struct', 'dump_table', 'finish'];
+
+    $.ligerDefaults.Grid.formatters['_render'] = function (data, column) {
+        return "<span class='by label'>" + data + "</span>";
+    };
+    /**
+     * 进行备份
+     */
+    function do_backup(info) {
+        if (info['status'] == 0) {
+            backup_dialog.hide();
+            $.ligerDialog.error(info['message']);
+            return;
+        }
+        var step_progress = (info['loop_max'] == 0) ? 100 : Math.ceil((info['loop'] / info['loop_max']) * 100);
+        var cur_step = Math.ceil((info['step_num'] / info['step_max']) * 100);
+        $('#step_progress').css('width', step_progress + '%');
+        $('#max_progress').css('width', cur_step + '%');
+        $('#step_text').html(info['step_text']);
+        $('#cur_step').html(cur_step + '%');
+        var backup_data = {limit: 1000, table: 0, loop: 1, step: 'start', step_list: steplist};
+        if (info['step'] == 'finish') {
+            $('#cur_step').html('100%');
+            $('#max_progress').css('width', '100%');
+            setTimeout(function () {
+                $.ligerDialog.success("备份成功");
+                backup_dialog.hide();
+                datagrid.reload();
+            }, 2000);
+        }
+        else if (info['step'] == 'dump_table') {
+            if (info['next_step'] != 'finish') {
+                backup_data['step'] = 'dump_table';
+                backup_data['table'] = info['table'];
+                backup_data['table_max'] = info['table_max'];
+                backup_data['loop'] = info['loop'];
+            }
+            else {
+                backup_data['step'] = 'finish';
+            }
+            $.post("{{url('database/backupDB')}}", backup_data, do_backup, 'json');
+        } else {
+            backup_data['step'] = info['next_step'];
+            $.post("{{url('database/backupDB')}}", backup_data, do_backup, 'json');
+        }
+    }
+    //开始下载
+    function download_backup(source) {
+        var row = datagrid.getSelectedRow();
+        if (!row) {
+            $.ligerDialog.error('请选择要下载的文件');
+        } else {
+            download_form.setData({type: source.type, filename: row.filename});
+            $('#download_form').submit();
+        }
+
+    }
+
+    /**
+     * 初始化备份
+     */
+    function new_backup() {
+        var form_tmp_data = backup_form.getData();
+        form_tmp_data['step_list'] += ",finish";
+        var backup_data = {
+            limit: form_tmp_data['limit'],
+            table: 0,
+            loop: 1,
+            step: 'start',
+            step_cur: 1,
+            step_list: form_tmp_data['step_list'].split(','),
+            option: form_tmp_data['option'].split(',')
+        };
+        $('#step_progress').css('width', '0%');
+        $('#max_progress').css('width', '0%');
+        $.post("{{url('database/backupDB')}}", backup_data, do_backup, 'json');
+        backup_dialog.show();
+    }
+
+    /**
+     * 进行还原
+     */
+    function do_restore(info) {
+        if (info['status'] == 0) {
+            restore_dialog.hide();
+            $.ligerDialog.error(info['message']);
+            return;
+        }
+        if (info['status'] == 2) {
+            $('restore_step').html(info['message']);
+            $('#restore_progress').css('width', '100%');
+            setTimeout(function () {
+                $.ligerDialog.success("还原成功");
+                restore_dialog.hide();
+            }, 2000);
+        }
+        else {
+            $('#restore_step').html("正在还原备份...");
+            $('#restore_progress').css('width', info['pecent'] + '%');
+            var restore_data = {
+                filename: info['filename'],
+                start: info['start'],
+                limit: info['limit'],
+                delimiter: info['delimiter']
+            };
+            $.post("{{url('database/restoreDB')}}", restore_data, do_restore);
+        }
+    }
+
+    /**
+     * 还原备份文件
+     */
+    function restore_backup() {
+        var row = datagrid.getSelectedRow();
+        if (!row) {
+            $.ligerDialog.error('请选择要还原的文件');
+        } else {
+            $.ligerDialog.confirm('确定要还原 [ ' + row.filename + ' ] 数据库备份文件 ?', function (type) {
+                if (type) {
+                    var restore_data = {limit: 1000, start: 0, delimiter: ';', filename: row.filename};
+                    $('#restore_progress').css('width', '0%');
+                    $('#restore_step').html('正在分析备份文件...');
+                    $.post("{{url('database/restoreDB')}}", restore_data, do_restore);
+                    restore_dialog.show();
+                }
+            });
+        }
+    }
+    /**
+     * 删除备份文件
+     */
+    function delete_backup() {
+        var row = datagrid.getSelectedRow();
+        if (!row) {
+            $.ligerDialog.error('请选择要删除的文件');
+        } else {
+            $.ligerDefaults.Dialog.width = 450;
+            $.ligerDialog.confirm('确定要删除 [ ' + row.filename + ' ] 数据库备份文件 ?', function (type) {
+                if (type) {
+                    $.post("{{url('database/deleteDB')}}", {filename: row.filename}, function (response) {
+                        if (response.status == 0) {
+                            $.ligerDialog.error(response.message);
+                        } else {
+                            $.ligerDialog.success(response.message);
+                            datagrid.reload();
+                        }
+                    });
+                }
+            });
+            $.ligerDefaults.Dialog.width = 280;
+        }
+    }
+
+
+    $(function () {
+        backup_dialog = $.ligerDialog({title: '备份进度', width: '520', height: '200', target: $("#backup_dialog")});
+        backup_dialog.hide();
+        restore_dialog = $.ligerDialog({title: '还原进度', width: '520', height: '150', target: $("#restore_dialog")});
+        restore_dialog.hide();
+        datagrid = $("#datagrid").ligerGrid({
+                    url: "{{url('database/backupList')}}",
+                    toolbar: {
+                        items: [
+                            {
+                                text: "新建备份",
+                                icon: "gi gi-database_plus",
+                                id: 'backup_form',
+                                type: 'dropdown',
+                                click: function () {
+                                    backup_form.setData({
+                                        step_list: "table_struct,view_struct,procedure_struct,function_struct,event_struct,dump_table",
+                                        option: "table_drop,view_drop,procedure_drop,function_drop,event_drop,bulk_insert",
+                                        limit: 1000
+                                    });
+                                }
+                            }, {
+                                text: "下载备份",
+                                icon: "icon-download",
+                                menu: {
+                                    items: [
+                                        {text: 'SQL格式', icon:'fi fi-sql', type:'sql',click: download_backup},
+                                        {line: true},
+                                        {text: 'TAR格式', icon:'fi fi-tar', type:'tar', click: download_backup},
+                                        {line: true},
+                                        {text: 'GZIP格式', icon:'fi fi-gz', type:'gzip', click: download_backup},
+                                        {line: true},
+                                        {text: 'BZIP格式', icon:'fi fi-zipx', type:'bzip', click: download_backup},
+                                        {line: true},
+                                        {text: 'ZIP格式',  icon:'fi fi-zip', type:'zip',click: download_backup},
+                                        {line: true}
+                                    ]
+                                }
+                            }, {
+                                text: "还原备份",
+                                icon: "gi gi-file_import",
+                                click: restore_backup
+                            }, {
+                                text: "删除备份",
+                                icon: "icon-remove",
+                                click: delete_backup
+                            }
+                        ]
+                    },
+                    columns: [
+                        {display: '文件名', name: 'filename', width: 250, align: 'center'},
+                        {display: '文件大小', name: 'filesize', width: 100, align: 'center'},
+                        {display: '创建时间', name: 'filetime', width: 180, align: 'center'},
+                        {display: '哈希值', name: 'filehash', width: 300, align: 'center'}
+                    ],
+                    usepager: false,
+                    width: '100%',
+                    height: '100%',
+                    sortname: 'id',
+                    sortorderparmname: 'desc',
+                    whenrclicktoselect: true
+                }
+        );
+        backup_form = $('#backup_form').ligerForm({
+            width: 650,
+            inputwidth: 200,
+            labelwidth: 80,
+            space: 10,
+            validate: true,
+            righttoken: "&nbsp;",
+            labelalign: "right",
+            align: "left",
+            fields: [
+                {
+                    name: "step_list",
+                    newline: true,
+                    type: "checkbox",
+                    display: "备份内容",
+                    aftercontent: "",
+                    width: 500,
+                    validate: {required: true},
+                    editor: {
+                        width: 500,
+                        initvalue: 'pending',
+                        cancelable: false,
+                        data: [{id: 'table_struct', text: '基本表'}, {
+                            id: 'view_struct',
+                            text: '视图'
+                        }, {id: 'procedure_struct', text: '存储过程'}, {
+                            id: 'function_struct',
+                            text: '函数'
+                        }, {id: 'event_struct', text: '触发器'}, {id: 'dump_table', text: '数据'}]
+                    }
+                }, {
+                    name: "option",
+                    newline: true,
+                    type: "checkbox",
+                    display: "备份选项",
+                    aftercontent: "",
+                    width: 500,
+                    validate: {required: true},
+                    editor: {
+                        width: 500,
+                        initvalue: 'pending',
+                        cancelable: false,
+                        data: [{id: 'table_drop', text: '表DROP语句'}, {
+                            id: 'view_drop',
+                            text: '视图DROP语句'
+                        }, {id: 'procedure_drop', text: '存储过程DROP语句'}, {
+                            id: 'function_drop',
+                            text: '函数DROP语句'
+                        }, {id: 'event_drop', text: '触发器DROP语句'}, {id: 'bulk_insert', text: '生成批量插入语句'}]
+                    }
+                }, {
+                    name: "limit",
+                    newline: true,
+                    type: "number",
+                    display: "每次备份",
+                    aftercontent: "条",
+                    width: 80,
+                    validate: {required: true},
+                    editor: {
+                        width: 80,
+                        value: '1000',
+                        format: 'int',
+                        isnegative: false,
+                        digits: true,
+                        min: 1,
+                        max: 1000000
+                    }
+                }
+            ], buttons: [{text: "开始备份", width: 80, click: new_backup}]
+        });
+        download_form = $('#download_form').ligerForm({
+            fields: [
+                {name: "filename", newline: false, type: "hidden"},
+                {name: "type", newline: false, type: "hidden"}
+            ]
+        });
+
+    });
+</script>
